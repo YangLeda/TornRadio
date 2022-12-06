@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import estimate from "../Utils/BattleStatsEstimator";
 import { readLocalStorage, writeLocalStorage } from "../Utils/PreLoadCache";
+import "./RWEnemyFactionTable.css";
 
 function RWEnemyFactionTable() {
   const [data, setData] = useState(null);
@@ -72,7 +73,7 @@ function RWEnemyFactionTable() {
           <b>Leaders: </b>[{data.leader}][{data["co-leader"]}]
         </p>
 
-        <table>
+        <table className="styled-table">
           <thead>
             <tr>
               <th>Index</th>
