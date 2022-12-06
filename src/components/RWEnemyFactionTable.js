@@ -102,7 +102,13 @@ function RWEnemyFactionTable() {
                 <tr key={key}>
                   <td>{i + 1}</td>
                   <td>
-                    {data.members[key]["name"]} [{key}]
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={"https://www.torn.com/profiles.php?XID=" + key}
+                    >
+                      {data.members[key]["name"]} [{key}]
+                    </a>
                   </td>
                   <td>{data.members[key]["level"]}</td>
                   <td>
