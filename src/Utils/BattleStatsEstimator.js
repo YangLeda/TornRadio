@@ -26,63 +26,49 @@ function estimate(personalDataJSON) {
     Legendary: 24,
     Elite: 25,
     Invincible: 26,
-  }
+  };
 
-  const estimatedStatsStr = [
-    "under 2k",
-    "2k - 25k",
-    "20k - 250k",
-    "200k - 2.5m",
-    "2m - 25m",
-    "20m - 250m",
-    "over 200m",
-  ]
+  const estimatedStatsStr = ["under 2k", "2k - 25k", "20k - 250k", "200k - 2.5m", "2m - 25m", "20m - 250m", "over 200m"];
 
-  const triggerLevel = [2, 6, 11, 26, 31, 50, 71, 100]
-  const triggerCrime = [100, 5000, 10000, 20000, 30000, 50000]
-  const triggerNetworth = [
-    5000000, 50000000, 500000000, 5000000000, 50000000000,
-  ]
+  const triggerLevel = [2, 6, 11, 26, 31, 50, 71, 100];
+  const triggerCrime = [100, 5000, 10000, 20000, 30000, 50000];
+  const triggerNetworth = [5000000, 50000000, 500000000, 5000000000, 50000000000];
 
   if (!personalDataJSON) {
-    console.log("estimate failed because of no data")
-    return "N/A"
+    console.log("estimate failed because of no data");
+    return "N/A";
   }
 
   // algorithm by Josephine [1923258]
-  var rankSpl = personalDataJSON.rank.split(" ")
-  var rankStr = rankSpl[0]
-  if (rankSpl[1][0] === rankSpl[1][0].toLowerCase()) rankStr += " " + rankSpl[1]
+  var rankSpl = personalDataJSON.rank.split(" ");
+  var rankStr = rankSpl[0];
+  if (rankSpl[1][0] === rankSpl[1][0].toLowerCase()) rankStr += " " + rankSpl[1];
 
-  var level = personalDataJSON.level
-  var rank = ranks[rankStr]
-  var crimes = personalDataJSON.criminalrecord
-    ? personalDataJSON.criminalrecord.total
-    : 0
-  var networth = personalDataJSON.personalstats
-    ? personalDataJSON.personalstats.networth
-    : 0
+  var level = personalDataJSON.level;
+  var rank = ranks[rankStr];
+  var crimes = personalDataJSON.criminalrecord ? personalDataJSON.criminalrecord.total : 0;
+  var networth = personalDataJSON.personalstats ? personalDataJSON.personalstats.networth : 0;
 
   var trLevel = 0,
     trCrime = 0,
-    trNetworth = 0
+    trNetworth = 0;
   for (let l in triggerLevel) {
-    if (triggerLevel[l] <= level) trLevel++
+    if (triggerLevel[l] <= level) trLevel++;
   }
   for (let c in triggerCrime) {
-    if (triggerCrime[c] <= crimes) trCrime++
+    if (triggerCrime[c] <= crimes) trCrime++;
   }
   for (let nw in triggerNetworth) {
-    if (triggerNetworth[nw] <= networth) trNetworth++
+    if (triggerNetworth[nw] <= networth) trNetworth++;
   }
 
-  var statLevel = rank - trLevel - trCrime - trNetworth - 1
+  var statLevel = rank - trLevel - trCrime - trNetworth - 1;
   //console.log("estimate statLevel " + statLevel + "[" + id + "]");
 
-  let estimatedStats = estimatedStatsStr[statLevel]
-  if (!estimatedStats) estimatedStats = "N/A"
+  let estimatedStats = estimatedStatsStr[statLevel];
+  if (!estimatedStats) estimatedStats = "N/A";
 
-  return estimatedStats
+  return estimatedStats;
 }
 
-export default estimate
+export default estimate;
