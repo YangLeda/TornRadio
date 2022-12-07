@@ -4,6 +4,8 @@ import Footer from "./Footer"
 import estimate from "../Utils/BattleStatsEstimator"
 import "./RWEnemyFactionTable.css"
 
+const API_URL = "http://www.tornradio.com:3001";
+
 function RWEnemyFactionTable() {
   const [data, setData] = useState(null)
   const [fetchError, setFetchError] = useState(null)
@@ -16,7 +18,7 @@ function RWEnemyFactionTable() {
     const fetchFaction = async () => {
       console.log("fetchFaction() start")
       try {
-        const response = await fetch(`/faction`) //todo
+        const response = await fetch(`${API_URL}/faction`)
         if (!response.ok) {
           throw new Error(
             `This is an HTTP error: The status is ${response.status}`
@@ -60,7 +62,7 @@ function RWEnemyFactionTable() {
       </div>
     )
   }
-  const serverCacheJSON = JSON.parse(localStorage.getItem("serverCache"));
+  const serverCacheJSON = JSON.parse(localStorage.getItem("serverCache"))
   return (
     <div className="App">
       <Header title="Faction Member List" />
@@ -95,7 +97,7 @@ function RWEnemyFactionTable() {
           </thead>
           <tbody>
             {Object.keys(data.members).map((key, i) => {
-              const personalDataJSON = serverCacheJSON[key];
+              const personalDataJSON = serverCacheJSON[key]
               return (
                 <tr key={key}>
                   <td>{i + 1}</td>
@@ -158,7 +160,7 @@ function RWEnemyFactionTable() {
 
 async function fetchServerCache() {
   console.log("fetchServerCache() start")
-  const response = await fetch(`/cache`) //todo
+  const response = await fetch(`${API_URL}/cache`) //todo
   const actualData = await response.json()
   console.log(actualData)
   localStorage.setItem("serverCache", JSON.stringify(actualData))

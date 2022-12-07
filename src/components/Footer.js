@@ -7,7 +7,7 @@ const Footer = () => {
         https://www.torn.com/forums.php#/p=threads&f=61&t=16065473
       </p>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
