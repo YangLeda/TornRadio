@@ -79,6 +79,7 @@ function RWEnemyFactionTable() {
               <th>Index</th>
               <th>Name[ID]</th>
               <th>Level</th>
+              <th>Age</th>
               <th>Xanax</th>
               <th>Rehab</th>
               <th>AttWon</th>
@@ -111,6 +112,7 @@ function RWEnemyFactionTable() {
                     </a>
                   </td>
                   <td>{data.members[key]["level"]}</td>
+                  <td>{personalDataJSON ? personalDataJSON["age"] : "N/A"}</td>
                   <td>
                     {personalDataJSON
                       ? personalDataJSON["personalstats"]["xantaken"]
@@ -164,7 +166,7 @@ function RWEnemyFactionTable() {
 }
 
 function fetchAllPersonalStats(memberIds) {
-  return;    // todo
+  return; // todo
   console.log("fetchAllPersonalStats() start");
   console.log(memberIds);
   const MAX_REQUEST_NUM = 100;
