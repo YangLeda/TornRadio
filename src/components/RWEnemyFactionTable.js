@@ -141,7 +141,7 @@ function RWEnemyFactionTable() {
                       ? personalDataJSON["personalstats"]["defendslost"]
                       : "N/A"}
                   </td>
-                  <td>{estimate(data.members[key])}</td>
+                  <td>{estimate(key)}</td>
                   <td>{data.members[key]["status"]["color"]}</td>
                   <td>{data.members[key]["last_action"]["relative"]}</td>
                   <td>{data.members[key]["last_action"]["status"]}</td>
@@ -164,17 +164,15 @@ function RWEnemyFactionTable() {
 }
 
 function fetchAllPersonalStats(memberIds) {
-  //
-  return;
+  return;    // todo
   console.log("fetchAllPersonalStats() start");
   console.log(memberIds);
   const MAX_REQUEST_NUM = 100;
   const REQUEST_DELAY = 1000;
   let requestCount = 0;
   const timerId = setInterval(() => {
-    console.log(`fetch ${memberIds[requestCount]}`);
     fetch(
-      `https://api.torn.com/user/${memberIds[requestCount]}?selections=basic,personalstats,crimes&key=${process.env.REACT_APP_TORN_API_KEY}`
+      `https://api.torn.com/user/${memberIds[requestCount]}?selections=basic,profile,personalstats,crimes&key=${process.env.REACT_APP_TORN_API_KEY}`
     )
       .then((response) => response.json())
       .then((data) => saveToLocalStorage(data["player_id"], data));
