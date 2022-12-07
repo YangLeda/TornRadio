@@ -3,7 +3,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
 import { Table } from "antd";
-import { compareColor, compareOnline } from "../Utils/SorterComparer";
+import { HeartFilled, ClockCircleFilled } from "@ant-design/icons";
+import { compareOnline, compareColor } from "../Utils/SorterComparer";
 
 const API_URL = "http://www.tornradio.com:3001";
 const columns = [
@@ -73,7 +74,7 @@ const columns = [
     sorter: (a, b) => a.defLost - b.defLost,
   },
   {
-    title: "Est Battle Stats",
+    title: "Est. Stats",
     dataIndex: "estimateBS",
     key: "estimateBS",
     sorter: (a, b) => compareEstimateBS(a.estimateBS, b.estimateBS),
@@ -114,23 +115,27 @@ const columns = [
     dataIndex: "online",
     key: "online",
     sorter: (a, b) => compareOnline(a.online, b.online),
+    render: (text) => {
+      if (text.indexOf("Offline") === 0) {
+        return <ClockCircleFilled style={{ color: "Gray" }} />;
+      } else if (text.indexOf("Online") === 0) {
+        return <ClockCircleFilled style={{ color: "forestgreen" }} />;
+      } else {
+        return <ClockCircleFilled style={{ color: "goldenrod" }} />;
+      }
+    },
   },
   {
-    title: "Action",
+    title: "Last Action",
     dataIndex: "action",
     key: "action",
-  },
-  {
-    title: "Color",
-    dataIndex: "color",
-    key: "color",
-    sorter: (a, b) => compareColor(a.color, b.color),
   },
   {
     title: "Status",
     dataIndex: "status",
     key: "status",
     sorter: (a, b) => compareColor(a.color, b.color),
+    render: (text, record) => <span style={{ color: record.color }}>{text} </span>,
   },
 ];
 
@@ -226,7 +231,7 @@ function processFactionData(data) {
     playerObj["index"] = i + 1;
     playerObj["nameId"] = `${data.members[key]["name"]}[${key}]`;
     playerObj["level"] = `${data.members[key]["level"]}`;
-    playerObj["color"] = `${data.members[key]["status"]["color"]}`;
+    playerObj["color"] = `${data.members[key]["status"]["color"]}`; // not used in table display
     playerObj["action"] = `${data.members[key]["last_action"]["relative"]}`;
     playerObj["online"] = `${data.members[key]["last_action"]["status"]}`;
     playerObj["status"] = `${data.members[key]["status"]["description"]}`;
