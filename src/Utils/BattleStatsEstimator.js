@@ -1,3 +1,5 @@
+const estimatedStatsStr = ["under 2k", "2k - 25k", "20k - 250k", "200k - 2.5m", "2m - 25m", "20m - 250m", "over 200m"];
+
 function estimate(personalDataJSON) {
   const ranks = {
     "Absolute beginner": 1,
@@ -27,8 +29,6 @@ function estimate(personalDataJSON) {
     Elite: 25,
     Invincible: 26,
   };
-
-  const estimatedStatsStr = ["under 2k", "2k - 25k", "20k - 250k", "200k - 2.5m", "2m - 25m", "20m - 250m", "over 200m"];
 
   const triggerLevel = [2, 6, 11, 26, 31, 50, 71, 100];
   const triggerCrime = [100, 5000, 10000, 20000, 30000, 50000];
@@ -63,7 +63,6 @@ function estimate(personalDataJSON) {
   }
 
   var statLevel = rank - trLevel - trCrime - trNetworth - 1;
-  //console.log("estimate statLevel " + statLevel + "[" + id + "]");
 
   let estimatedStats = estimatedStatsStr[statLevel];
   if (!estimatedStats) estimatedStats = "N/A";
@@ -71,4 +70,14 @@ function estimate(personalDataJSON) {
   return estimatedStats;
 }
 
-export default estimate;
+function compareEstimateBS(str1, str2) {
+  let map = new Map();
+  let index = 0;
+  estimatedStatsStr.forEach((str) => {
+    map.set(str, index);
+    index++;
+  });
+  return map.get(str1) - map.get(str2);
+}
+
+export { estimate, compareEstimateBS };

@@ -1,140 +1,254 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import estimate from "../Utils/BattleStatsEstimator";
-import "./RWEnemyFactionTable.css";
+import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
+import { Table } from "antd";
+import { compareColor, compareOnline } from "../Utils/SorterComparer";
 
 const API_URL = "http://www.tornradio.com:3001";
+const columns = [
+  {
+    title: "Index",
+    dataIndex: "index",
+    key: "index",
+    sorter: (a, b) => a.index - b.index,
+  },
+  {
+    title: "Name[ID]",
+    dataIndex: "nameId",
+    key: "nameId",
+    render: (text, record) => (
+      <a href={"https://www.torn.com/profiles.php?XID=" + record.id} target="_blank" rel="noreferrer">
+        {text}
+      </a>
+    ),
+    sorter: (a, b) => a.nameId.localeCompare(b.nameId),
+  },
+  {
+    title: "Level",
+    dataIndex: "level",
+    key: "level",
+    sorter: (a, b) => a.level - b.level,
+  },
+  {
+    title: "Age",
+    dataIndex: "age",
+    key: "age",
+    sorter: (a, b) => a.age - b.age,
+  },
+  {
+    title: "Xanax",
+    dataIndex: "xanax",
+    key: "xanax",
+    sorter: (a, b) => a.xanax - b.xanax,
+  },
+  {
+    title: "Rehab",
+    dataIndex: "rehab",
+    key: "rehab",
+    sorter: (a, b) => a.rehab - b.rehab,
+  },
+  {
+    title: "AttWon",
+    dataIndex: "attWon",
+    key: "attWon",
+    sorter: (a, b) => a.attWon - b.attWon,
+  },
+  {
+    title: "AttLost",
+    dataIndex: "attLost",
+    key: "attLost",
+    sorter: (a, b) => a.attLost - b.attLost,
+  },
+  {
+    title: "DefWon",
+    dataIndex: "defWon",
+    key: "defWon",
+    sorter: (a, b) => a.defWon - b.defWon,
+  },
+  {
+    title: "DefLost",
+    dataIndex: "defLost",
+    key: "defLost",
+    sorter: (a, b) => a.defLost - b.defLost,
+  },
+  {
+    title: "Est Battle Stats",
+    dataIndex: "estimateBS",
+    key: "estimateBS",
+    sorter: (a, b) => compareEstimateBS(a.estimateBS, b.estimateBS),
+    filters: [
+      {
+        text: "under 2k",
+        value: "under 2k",
+      },
+      {
+        text: "2k - 25k",
+        value: "2k - 25k",
+      },
+      {
+        text: "20k - 250k",
+        value: "20k - 250k",
+      },
+      {
+        text: "200k - 2.5m",
+        value: "200k - 2.5m",
+      },
+      {
+        text: "2m - 25m",
+        value: "2m - 25m",
+      },
+      {
+        text: "20m - 250m",
+        value: "20m - 250m",
+      },
+      {
+        text: "over 200m",
+        value: "over 200m",
+      },
+    ],
+    onFilter: (value, record) => record.estimateBS.indexOf(value) === 0,
+  },
+  {
+    title: "Online",
+    dataIndex: "online",
+    key: "online",
+    sorter: (a, b) => compareOnline(a.online, b.online),
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+  },
+  {
+    title: "Color",
+    dataIndex: "color",
+    key: "color",
+    sorter: (a, b) => compareColor(a.color, b.color),
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    sorter: (a, b) => compareColor(a.color, b.color),
+  },
+];
 
 function RWEnemyFactionTable() {
-  const [data, setData] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingFaction, setIsFetchingFaction] = useState(true);
+  const [fetchFactionError, setfetchFactionError] = useState(null);
+
+  const [factionData, setFactionData] = useState(null);
+  const [dataSource, setDataSource] = useState(null);
 
   useEffect(() => {
     console.log("useEffect() start");
-    fetchServerCache();
-
     const fetchFaction = async () => {
-      console.log("fetchFaction() start");
+      console.log("fetchFaction start");
       try {
         const response = await fetch(`${API_URL}/faction`);
         if (!response.ok) {
-          throw new Error(`This is an HTTP error: The status is ${response.status}`);
+          throw new Error(`fetchFaction HTTP error: ${response.status}`);
         }
         const actualData = await response.json();
-        console.log(actualData);
-        setData(actualData);
-        setFetchError(null);
+        console.log("fetchFaction done size = " + Object.keys(actualData).length);
+        setFactionData(actualData);
+        setfetchFactionError(null);
+        let processedFactionData = processFactionData(actualData);
+        let cacheData = await fetchCache();
+        fillInCacheData(processedFactionData, cacheData);
+        setDataSource(processedFactionData);
       } catch (err) {
-        setFetchError(err.message);
+        console.log("fetchFaction error" + err.message);
+        setfetchFactionError(err.message);
       } finally {
-        setIsLoading(false);
+        setIsFetchingFaction(false);
       }
-      console.log("fetchFaction() end");
     };
     fetchFaction();
+
+    const fetchCache = async () => {
+      console.log("fetchCache start");
+      try {
+        const response = await fetch(`${API_URL}/cache`);
+        if (!response.ok) {
+          throw new Error(`fetchCache HTTP error: ${response.status}`);
+        }
+        const actualData = await response.json();
+        console.log("fetchCache done size = " + Object.keys(actualData).length);
+        return actualData;
+      } catch (err) {
+        console.log("fetchCache error" + err.message);
+      }
+    };
     console.log("useEffect() end");
   }, []);
 
-  if (isLoading) {
+  // show Error
+  if (fetchFactionError) {
     return (
       <div className="App">
         <Header title="Faction Member List" />
         <main>
-          <p>Fetching data...</p>
+          <p style={{ color: "red" }}>{`Error: ${fetchFactionError}`}</p>
         </main>
         <Footer />
       </div>
     );
   }
 
-  if (fetchError) {
-    return (
-      <div className="App">
-        <Header title="Faction Member List" />
-        <main>
-          <p style={{ color: "red" }}>{`Error: ${fetchError}`}</p>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-  const serverCacheJSON = JSON.parse(localStorage.getItem("serverCache"));
+  // show Data
   return (
     <div className="App">
       <Header title="Faction Member List" />
       <main>
         <p>
           <b>Faction: </b>
-          {data.name}[{data.ID}]
+          {factionData ? factionData.name + "[" + factionData.ID + "]" : "Loading"}
         </p>
         <p>
-          <b>Leaders: </b>[{data.leader}][{data["co-leader"]}]
+          <b>Leaders: </b>
+          {factionData ? "[" + factionData.leader + "] [" + factionData["co-leader"] + "]" : "Loading"}{" "}
         </p>
-
-        <table className="styled-table">
-          <thead>
-            <tr>
-              <th>Index</th>
-              <th>Name[ID]</th>
-              <th>Level</th>
-              <th>Age</th>
-              <th>Xanax</th>
-              <th>Rehab</th>
-              <th>AttWon</th>
-              <th>AttLost</th>
-              <th>DefWon</th>
-              <th>DefLost</th>
-              <th>Est Battle Stats</th>
-              <th>Color</th>
-              <th>Action</th>
-              <th>Online</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(data.members).map((key, i) => {
-              const personalDataJSON = serverCacheJSON[key];
-              return (
-                <tr key={key}>
-                  <td>{i + 1}</td>
-                  <td>
-                    <a target="_blank" rel="noreferrer" href={"https://www.torn.com/profiles.php?XID=" + key}>
-                      {data.members[key]["name"]} [{key}]
-                    </a>
-                  </td>
-                  <td>{data.members[key]["level"]}</td>
-                  <td>{personalDataJSON ? personalDataJSON["age"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["xantaken"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["rehabs"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["attackswon"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["attackslost"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["defendswon"] : "N/A"}</td>
-                  <td>{personalDataJSON ? personalDataJSON["personalstats"]["defendslost"] : "N/A"}</td>
-                  <td>{estimate(personalDataJSON)}</td>
-                  <td>{data.members[key]["status"]["color"]}</td>
-                  <td>{data.members[key]["last_action"]["relative"]}</td>
-                  <td>{data.members[key]["last_action"]["status"]}</td>
-                  <td>{data.members[key]["status"]["description"]}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <Table dataSource={dataSource} columns={columns} bordered={true} loading={isFetchingFaction} pagination={false} size="small" />
       </main>
       <Footer />
     </div>
   );
 }
 
-async function fetchServerCache() {
-  console.log("fetchServerCache() start");
-  const response = await fetch(`${API_URL}/cache`); //todo
-  const actualData = await response.json();
-  console.log(actualData);
-  localStorage.setItem("serverCache", JSON.stringify(actualData));
-  console.log("fetchServerCache() end");
+function processFactionData(data) {
+  let result = [];
+  Object.keys(data.members).map((key, i) => {
+    let playerObj = {};
+    playerObj["key"] = `${key}`; // key in table
+    playerObj["id"] = `${key}`; // not used in table display
+    playerObj["index"] = i + 1;
+    playerObj["nameId"] = `${data.members[key]["name"]}[${key}]`;
+    playerObj["level"] = `${data.members[key]["level"]}`;
+    playerObj["color"] = `${data.members[key]["status"]["color"]}`;
+    playerObj["action"] = `${data.members[key]["last_action"]["relative"]}`;
+    playerObj["online"] = `${data.members[key]["last_action"]["status"]}`;
+    playerObj["status"] = `${data.members[key]["status"]["description"]}`;
+    result.push(playerObj);
+    return true;
+  });
+  console.log("processFactionData done size = " + Object.keys(result).length);
+  return result;
+}
+
+function fillInCacheData(origin, data) {
+  origin.forEach((playerObj) => {
+    playerObj["age"] = data[playerObj["key"]]["age"];
+    playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
+    playerObj["rehab"] = data[playerObj["key"]]["personalstats"]["rehabs"];
+    playerObj["attWon"] = data[playerObj["key"]]["personalstats"]["attackswon"];
+    playerObj["attLost"] = data[playerObj["key"]]["personalstats"]["attackslost"];
+    playerObj["defWon"] = data[playerObj["key"]]["personalstats"]["defendswon"];
+    playerObj["defLost"] = data[playerObj["key"]]["personalstats"]["defendslost"];
+    playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
+  });
+  console.log("fillInCacheData done size = " + Object.keys(origin).length);
 }
 
 export default RWEnemyFactionTable;
