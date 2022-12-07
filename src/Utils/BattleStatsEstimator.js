@@ -1,4 +1,4 @@
-function estimate(id) {
+function estimate(personalDataJSON) {
   const ranks = {
     "Absolute beginner": 1,
     Beginner: 2,
@@ -44,27 +44,21 @@ function estimate(id) {
     5000000, 50000000, 500000000, 5000000000, 50000000000,
   ];
 
-  const data = localStorage.getItem(id);
-  if (!data) {
-    console.log("estimate failed because of no data [" + id + "]");
-    return "N/A";
-  }
-  const dataJSON = JSON.parse(data);
-  if (!dataJSON) {
-    console.log("estimate failed because of invalid data parse [" + id + "]");
+  if (!personalDataJSON) {
+    console.log("estimate failed because of no data");
     return "N/A";
   }
 
   // algorithm by Josephine [1923258]
-  var rankSpl = dataJSON.rank.split(" ");
+  var rankSpl = personalDataJSON.rank.split(" ");
   var rankStr = rankSpl[0];
   if (rankSpl[1][0] === rankSpl[1][0].toLowerCase())
     rankStr += " " + rankSpl[1];
 
-  var level = dataJSON.level;
+  var level = personalDataJSON.level;
   var rank = ranks[rankStr];
-  var crimes = dataJSON.criminalrecord ? dataJSON.criminalrecord.total : 0;
-  var networth = dataJSON.personalstats ? dataJSON.personalstats.networth : 0;
+  var crimes = personalDataJSON.criminalrecord ? personalDataJSON.criminalrecord.total : 0;
+  var networth = personalDataJSON.personalstats ? personalDataJSON.personalstats.networth : 0;
 
   var trLevel = 0,
     trCrime = 0,

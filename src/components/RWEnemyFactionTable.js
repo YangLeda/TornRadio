@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import estimate from "../Utils/BattleStatsEstimator";
-import { readLocalStorage, writeLocalStorage } from "../Utils/PreLoadCache";
-import "./RWEnemyFactionTable.css";
+import React, { useState, useEffect } from "react"
+import Header from "./Header"
+import Footer from "./Footer"
+import estimate from "../Utils/BattleStatsEstimator"
+import "./RWEnemyFactionTable.css"
 
 function RWEnemyFactionTable() {
-  const [data, setData] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null)
+  const [fetchError, setFetchError] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    //readLocalStorage();
-    writeLocalStorage();
-    console.log("useEffect() start");
-    const fetchData = async () => {
+    console.log("useEffect() start")
+    fetchServerCache()
+
+    const fetchFaction = async () => {
+      console.log("fetchFaction() start")
       try {
-        const response = await fetch(
-          `https://api.torn.com/faction/37595?selections=&key=${process.env.REACT_APP_TORN_API_KEY}`
-        );
+        const response = await fetch(`/faction`) //todo
         if (!response.ok) {
           throw new Error(
             `This is an HTTP error: The status is ${response.status}`
-          );
+          )
         }
-        const actualData = await response.json();
-        console.log(actualData);
-        setData(actualData);
-        setFetchError(null);
+        const actualData = await response.json()
+        console.log(actualData)
+        setData(actualData)
+        setFetchError(null)
       } catch (err) {
-        setFetchError(err.message);
+        setFetchError(err.message)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
-    fetchData();
-  }, []);
+      console.log("fetchFaction() end")
+    }
+    fetchFaction()
+    console.log("useEffect() end")
+  }, [])
 
   if (isLoading) {
     return (
       <div className="App">
         <Header title="Faction Member List" />
         <main>
-          <p>Loading List...</p>
+          <p>Fetching data...</p>
         </main>
         <Footer />
       </div>
-    );
+    )
   }
 
   if (fetchError) {
@@ -58,9 +58,9 @@ function RWEnemyFactionTable() {
         </main>
         <Footer />
       </div>
-    );
+    )
   }
-
+  const serverCacheJSON = JSON.parse(localStorage.getItem("serverCache"));
   return (
     <div className="App">
       <Header title="Faction Member List" />
@@ -95,10 +95,7 @@ function RWEnemyFactionTable() {
           </thead>
           <tbody>
             {Object.keys(data.members).map((key, i) => {
-              const personalData = localStorage.getItem(key);
-              const personalDataJSON = personalData
-                ? JSON.parse(personalData)
-                : null;
+              const personalDataJSON = serverCacheJSON[key];
               return (
                 <tr key={key}>
                   <td>{i + 1}</td>
@@ -143,62 +140,29 @@ function RWEnemyFactionTable() {
                       ? personalDataJSON["personalstats"]["defendslost"]
                       : "N/A"}
                   </td>
-                  <td>{estimate(key)}</td>
+                  <td>{estimate(personalDataJSON)}</td>
                   <td>{data.members[key]["status"]["color"]}</td>
                   <td>{data.members[key]["last_action"]["relative"]}</td>
                   <td>{data.members[key]["last_action"]["status"]}</td>
                   <td>{data.members[key]["status"]["description"]}</td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </table>
-        <button
-          disabled={!true}
-          onClick={() => fetchAllPersonalStats(Object.keys(data.members))}
-        >
-          Update All Personal Stats(Under construction)
-        </button>
       </main>
       <Footer />
     </div>
-  );
+  )
 }
 
-function fetchAllPersonalStats(memberIds) {
-  return; // todo
-  console.log("fetchAllPersonalStats() start");
-  console.log(memberIds);
-  const MAX_REQUEST_NUM = 100;
-  const REQUEST_DELAY = 1000;
-  let requestCount = 0;
-  const timerId = setInterval(() => {
-    fetch(
-      `https://api.torn.com/user/${memberIds[requestCount]}?selections=basic,profile,personalstats,crimes&key=${process.env.REACT_APP_TORN_API_KEY}`
-    )
-      .then((response) => response.json())
-      .then((data) => saveToLocalStorage(data["player_id"], data));
-    requestCount++;
-    if (requestCount > MAX_REQUEST_NUM || requestCount > memberIds.length - 1) {
-      console.log("fetch stopped because MAX_REQUEST_NUM reached.");
-      clearInterval(timerId);
-    }
-    if (requestCount > memberIds.length - 1) {
-      console.log("fetch finished.");
-      clearInterval(timerId);
-    }
-  }, REQUEST_DELAY);
+async function fetchServerCache() {
+  console.log("fetchServerCache() start")
+  const response = await fetch(`/cache`) //todo
+  const actualData = await response.json()
+  console.log(actualData)
+  localStorage.setItem("serverCache", JSON.stringify(actualData))
+  console.log("fetchServerCache() end")
 }
 
-function saveToLocalStorage(memberId, data) {
-  console.log(`saveToLocalStorage [${memberId}]`);
-  if (memberId && JSON.stringify(data)) {
-    localStorage.setItem(memberId, JSON.stringify(data));
-  } else {
-    console.log(
-      `saveToLocalStorage [${memberId}] Failed because of invalid value`
-    );
-  }
-}
-
-export default RWEnemyFactionTable;
+export default RWEnemyFactionTable
