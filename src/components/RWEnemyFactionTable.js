@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import "./RWEnemyFactionTable.css";
 import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
-import { Table } from "antd";
-import { HeartFilled, ClockCircleFilled } from "@ant-design/icons";
-import { compareOnline, compareColor } from "../Utils/SorterComparer";
+import { Button, Table } from "antd";
+import { ClockCircleFilled } from "@ant-design/icons";
+import { compareOnline, compareStatus } from "../Utils/SorterComparer";
 
 const API_URL = "http://www.tornradio.com:3001";
 const columns = [
@@ -12,7 +13,6 @@ const columns = [
     title: "Index",
     dataIndex: "index",
     key: "index",
-    sorter: (a, b) => a.index - b.index,
   },
   {
     title: "Name[ID]",
@@ -23,7 +23,6 @@ const columns = [
         {text}
       </a>
     ),
-    sorter: (a, b) => a.nameId.localeCompare(b.nameId),
   },
   {
     title: "Level",
@@ -35,43 +34,21 @@ const columns = [
     title: "Age",
     dataIndex: "age",
     key: "age",
-    sorter: (a, b) => a.age - b.age,
   },
   {
     title: "Xanax",
     dataIndex: "xanax",
     key: "xanax",
-    sorter: (a, b) => a.xanax - b.xanax,
   },
   {
-    title: "Rehab",
-    dataIndex: "rehab",
-    key: "rehab",
-    sorter: (a, b) => a.rehab - b.rehab,
+    title: "Att W/L",
+    dataIndex: "att",
+    key: "att",
   },
   {
-    title: "AttWon",
-    dataIndex: "attWon",
-    key: "attWon",
-    sorter: (a, b) => a.attWon - b.attWon,
-  },
-  {
-    title: "AttLost",
-    dataIndex: "attLost",
-    key: "attLost",
-    sorter: (a, b) => a.attLost - b.attLost,
-  },
-  {
-    title: "DefWon",
-    dataIndex: "defWon",
-    key: "defWon",
-    sorter: (a, b) => a.defWon - b.defWon,
-  },
-  {
-    title: "DefLost",
-    dataIndex: "defLost",
-    key: "defLost",
-    sorter: (a, b) => a.defLost - b.defLost,
+    title: "Def W/L",
+    dataIndex: "def",
+    key: "def",
   },
   {
     title: "Est. Stats",
@@ -120,10 +97,25 @@ const columns = [
         return <ClockCircleFilled style={{ color: "Gray" }} />;
       } else if (text.indexOf("Online") === 0) {
         return <ClockCircleFilled style={{ color: "forestgreen" }} />;
-      } else {
+      } else if (text.indexOf("Idle") === 0) {
         return <ClockCircleFilled style={{ color: "goldenrod" }} />;
       }
     },
+    filters: [
+      {
+        text: "Online",
+        value: "Online",
+      },
+      {
+        text: "Offline",
+        value: "Offline",
+      },
+      {
+        text: "Idle",
+        value: "Idle",
+      },
+    ],
+    onFilter: (value, record) => record.online.indexOf(value) === 0,
   },
   {
     title: "Last Action",
@@ -134,7 +126,7 @@ const columns = [
     title: "Status",
     dataIndex: "status",
     key: "status",
-    sorter: (a, b) => compareColor(a.color, b.color),
+    sorter: (a, b) => compareStatus(a, b),
     render: (text, record) => <span style={{ color: record.color }}>{text} </span>,
   },
 ];
@@ -148,46 +140,70 @@ function RWEnemyFactionTable() {
 
   useEffect(() => {
     console.log("useEffect() start");
-    const fetchFaction = async () => {
-      console.log("fetchFaction start");
-      try {
-        const response = await fetch(`${API_URL}/faction`);
-        if (!response.ok) {
-          throw new Error(`fetchFaction HTTP error: ${response.status}`);
-        }
-        const actualData = await response.json();
-        console.log("fetchFaction done size = " + Object.keys(actualData).length);
-        setFactionData(actualData);
-        setfetchFactionError(null);
-        let processedFactionData = processFactionData(actualData);
-        let cacheData = await fetchCache();
-        fillInCacheData(processedFactionData, cacheData);
-        setDataSource(processedFactionData);
-      } catch (err) {
-        console.log("fetchFaction error" + err.message);
-        setfetchFactionError(err.message);
-      } finally {
-        setIsFetchingFaction(false);
-      }
-    };
     fetchFaction();
-
-    const fetchCache = async () => {
-      console.log("fetchCache start");
-      try {
-        const response = await fetch(`${API_URL}/cache`);
-        if (!response.ok) {
-          throw new Error(`fetchCache HTTP error: ${response.status}`);
-        }
-        const actualData = await response.json();
-        console.log("fetchCache done size = " + Object.keys(actualData).length);
-        return actualData;
-      } catch (err) {
-        console.log("fetchCache error" + err.message);
-      }
-    };
     console.log("useEffect() end");
   }, []);
+
+  const fetchFaction = async () => {
+    console.log("fetchFaction start");
+    try {
+      const response = await fetch(`${API_URL}/faction`);
+      if (!response.ok) {
+        throw new Error(`fetchFaction HTTP error: ${response.status}`);
+      }
+      const actualData = await response.json();
+      console.log("fetchFaction done size = " + Object.keys(actualData).length);
+      setFactionData(actualData);
+      setfetchFactionError(null);
+      let processedFactionData = processFactionData(actualData);
+      let cacheData = await fetchCache();
+      fillInCacheData(processedFactionData, cacheData);
+      setDataSource(processedFactionData);
+    } catch (err) {
+      console.log("fetchFaction error" + err.message);
+      setfetchFactionError(err.message);
+    } finally {
+      setIsFetchingFaction(false);
+    }
+  };
+
+  const fetchCache = async () => {
+    console.log("fetchCache start");
+    try {
+      const response = await fetch(`${API_URL}/cache`);
+      if (!response.ok) {
+        throw new Error(`fetchCache HTTP error: ${response.status}`);
+      }
+      const actualData = await response.json();
+      console.log("fetchCache done size = " + Object.keys(actualData).length);
+      return actualData;
+    } catch (err) {
+      console.log("fetchCache error" + err.message);
+    }
+  };
+
+  const updateTable = async () => {
+    console.log("updateTable start");
+    setIsFetchingFaction(true);
+    try {
+      const response = await fetch(`${API_URL}/faction`);
+      if (!response.ok) {
+        throw new Error(`updateTable HTTP error: ${response.status}`);
+      }
+      const actualData = await response.json();
+      console.log("updateTable done size = " + Object.keys(actualData).length);
+      setfetchFactionError(null);
+      let processedFactionData = processFactionData(actualData);
+      let cacheData = await fetchCache();
+      fillInCacheData(processedFactionData, cacheData);
+      setDataSource(processedFactionData);
+    } catch (err) {
+      console.log("updateTable error" + err.message);
+      setfetchFactionError(err.message);
+    } finally {
+      setIsFetchingFaction(false);
+    }
+  };
 
   // show Error
   if (fetchFactionError) {
@@ -206,16 +222,17 @@ function RWEnemyFactionTable() {
   return (
     <div className="App">
       <Header title="Faction Member List" />
-      <main>
+      <main id="main">
         <p>
           <b>Faction: </b>
           {factionData ? factionData.name + "[" + factionData.ID + "]" : "Loading"}
+          <b>&nbsp;&nbsp;&nbsp;&nbsp;Leaders: </b>
+          {factionData ? "[" + factionData.leader + "] [" + factionData["co-leader"] + "]" : "Loading"}
         </p>
-        <p>
-          <b>Leaders: </b>
-          {factionData ? "[" + factionData.leader + "] [" + factionData["co-leader"] + "]" : "Loading"}{" "}
-        </p>
-        <Table dataSource={dataSource} columns={columns} bordered={true} loading={isFetchingFaction} pagination={false} size="small" />
+        <Button id="update-table-btn" type="primary" loading={isFetchingFaction} onClick={updateTable}>
+          Update Members Status
+        </Button>
+        <Table id="member-table" dataSource={dataSource} columns={columns} bordered={true} loading={isFetchingFaction} pagination={false} size="small" tableLayout="auto" />
       </main>
       <Footer />
     </div>
@@ -231,7 +248,7 @@ function processFactionData(data) {
     playerObj["index"] = i + 1;
     playerObj["nameId"] = `${data.members[key]["name"]}[${key}]`;
     playerObj["level"] = `${data.members[key]["level"]}`;
-    playerObj["color"] = `${data.members[key]["status"]["color"]}`; // not used in table display
+    playerObj["color"] = `${data.members[key]["status"]["color"]}`;
     playerObj["action"] = `${data.members[key]["last_action"]["relative"]}`;
     playerObj["online"] = `${data.members[key]["last_action"]["status"]}`;
     playerObj["status"] = `${data.members[key]["status"]["description"]}`;
@@ -246,11 +263,8 @@ function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     playerObj["age"] = data[playerObj["key"]]["age"];
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
-    playerObj["rehab"] = data[playerObj["key"]]["personalstats"]["rehabs"];
-    playerObj["attWon"] = data[playerObj["key"]]["personalstats"]["attackswon"];
-    playerObj["attLost"] = data[playerObj["key"]]["personalstats"]["attackslost"];
-    playerObj["defWon"] = data[playerObj["key"]]["personalstats"]["defendswon"];
-    playerObj["defLost"] = data[playerObj["key"]]["personalstats"]["defendslost"];
+    playerObj["att"] = `${data[playerObj["key"]]["personalstats"]["attackswon"]}/${data[playerObj["key"]]["personalstats"]["attackslost"]}`;
+    playerObj["def"] = `${data[playerObj["key"]]["personalstats"]["defendswon"]}/${data[playerObj["key"]]["personalstats"]["defendslost"]}`;
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
   });
   console.log("fillInCacheData done size = " + Object.keys(origin).length);

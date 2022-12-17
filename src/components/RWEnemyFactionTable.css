@@ -1,0 +1,14 @@
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#update-table-btn {
+    margin: 10px;
+}
+
+#member-table {
+  width: 1500px;
+}
