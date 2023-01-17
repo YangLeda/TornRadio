@@ -41,6 +41,16 @@ const columns = [
     key: "xanax",
   },
   {
+    title: "Refills",
+    dataIndex: "refill",
+    key: "refill",
+  },
+  {
+    title: "Energy Drinks",
+    dataIndex: "drinks",
+    key: "drinks",
+  },
+  {
     title: "Est. Stats",
     dataIndex: "estimateBS",
     key: "estimateBS",
@@ -253,6 +263,8 @@ function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     playerObj["age"] = data[playerObj["key"]]["age"];
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
+    playerObj["refill"] = data[playerObj["key"]]["personalstats"]["refills"];
+    playerObj["drink"] = data[playerObj["key"]]["personalstats"]["energydrinkused"];
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
   });
   console.log("fillInCacheData done size = " + Object.keys(origin).length);
