@@ -9,7 +9,7 @@ function compareStatus(a, b) {
   }
   if (map.get(a.color) !== 1) {
     // if is not in hospital
-    return a.statu.localeCompare(b.status);
+    return a.status.localeCompare(b.status);
   }
   if (a.status.startsWith("In federal")) {
     return -1;
