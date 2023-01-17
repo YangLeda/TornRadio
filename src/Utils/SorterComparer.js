@@ -9,7 +9,7 @@ function compareStatus(a, b) {
   }
   if (map.get(a.color) !== 1) {
     // if is not in hospital
-    return 0;
+    return a.statu.localeCompare(b.status);
   }
   return getTimeInSecs(a.status) - getTimeInSecs(b.status); // Compare in hospital seconds
 }
