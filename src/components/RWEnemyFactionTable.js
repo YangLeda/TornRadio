@@ -41,16 +41,6 @@ const columns = [
     key: "xanax",
   },
   {
-    title: "Att W/L",
-    dataIndex: "att",
-    key: "att",
-  },
-  {
-    title: "Def W/L",
-    dataIndex: "def",
-    key: "def",
-  },
-  {
     title: "Est. Stats",
     dataIndex: "estimateBS",
     key: "estimateBS",
@@ -263,8 +253,6 @@ function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     playerObj["age"] = data[playerObj["key"]]["age"];
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
-    playerObj["att"] = `${data[playerObj["key"]]["personalstats"]["attackswon"]}/${data[playerObj["key"]]["personalstats"]["attackslost"]}`;
-    playerObj["def"] = `${data[playerObj["key"]]["personalstats"]["defendswon"]}/${data[playerObj["key"]]["personalstats"]["defendslost"]}`;
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
   });
   console.log("fillInCacheData done size = " + Object.keys(origin).length);
