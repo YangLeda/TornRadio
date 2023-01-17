@@ -13,6 +13,7 @@ const columns = [
     title: "Index",
     dataIndex: "index",
     key: "index",
+    sorter: (a, b) => a.index - b.index,
   },
   {
     title: "Name[ID]",
@@ -34,21 +35,25 @@ const columns = [
     title: "Age",
     dataIndex: "age",
     key: "age",
+    sorter: (a, b) => a.age - b.age,
   },
   {
     title: "Xanax",
     dataIndex: "xanax",
     key: "xanax",
+    sorter: (a, b) => a.xanax - b.xanax,
   },
   {
     title: "Refills",
     dataIndex: "refill",
     key: "refill",
+    sorter: (a, b) => a.refill - b.refill,
   },
   {
     title: "Energy Drinks",
     dataIndex: "drink",
     key: "drink",
+    sorter: (a, b) => a.drink - b.drink,
   },
   {
     title: "Est. Stats",
