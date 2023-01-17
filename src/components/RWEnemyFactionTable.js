@@ -47,8 +47,8 @@ const columns = [
   },
   {
     title: "Energy Drinks",
-    dataIndex: "drinks",
-    key: "drinks",
+    dataIndex: "drink",
+    key: "drink",
   },
   {
     title: "Est. Stats",
