@@ -21,21 +21,23 @@ function compareStatus(a, b) {
 }
 
 function getTimeInSecs(str) {
-  // Example inputs:
-  // "In hospital for 2 secs"
-  // "In hospital for 11 mins"
-  // "In hospital for 2 hrs 46 mins"
   let splited = str.split(" ");
-  if (str.indexOf("secs") >= 0) {
+  if (str.indexOf("secs") >= 0 && str.indexOf("hrs") < 0 && str.indexOf("mins") < 0) {  // "In hospital for 2 secs"
     return parseInt(splited[3]);
   }
-  if (str.indexOf("hrs") >= 0 && str.indexOf("mins") >= 0) {
-    return parseInt(splited[3]) * 60 * 60 + parseInt(splited[5]);
+  if (str.indexOf("hrs") >= 0 && str.indexOf("mins") >= 0 && str.indexOf("secs") < 0) {  // "In hospital for 2 hrs 46 mins"
+    return parseInt(splited[3]) * 60 * 60 + parseInt(splited[5]) * 60;
   }
-  if (str.indexOf("hrs") >= 0 && str.indexOf("mins") < 0) {
+  if (str.indexOf("hrs") >= 0 && str.indexOf("mins") < 0 && str.indexOf("secs") < 0) {  // "In hospital for 2 hrs"
     return parseInt(splited[3]) * 60 * 60;
   }
-  return parseInt(splited[3]) * 60;
+  if (str.indexOf("hrs") < 0 && str.indexOf("mins") >= 0 && str.indexOf("secs") < 0) {  // "In hospital for 2 mins"
+    return parseInt(splited[3]) * 60;
+  }
+  if (str.indexOf("hrs") < 0 && str.indexOf("mins") >= 0 && str.indexOf("secs") >= 0) {  // "In hospital for 2 mins 30 secs"
+    return parseInt(splited[3]) * 60 + parseInt(splited[5]);
+  }
+  return 
 }
 
 function compareOnline(str1, str2) {
