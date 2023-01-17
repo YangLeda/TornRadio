@@ -3,6 +3,12 @@ function compareStatus(a, b) {
   map.set("green", 0); // Okay
   map.set("red", 1); // In hospital
   map.set("blue", 2); // Traveling
+  if (a.status.startsWith("In federal")) {
+    return 1;
+  }
+  if (b.status.startsWith("In federal")) {
+    return -1;
+  }
   if (map.get(a.color) - map.get(b.color) !== 0) {
     // if is different status
     return map.get(a.color) - map.get(b.color);
@@ -10,12 +16,6 @@ function compareStatus(a, b) {
   if (map.get(a.color) !== 1) {
     // if is not in hospital
     return a.status.localeCompare(b.status);
-  }
-  if (a.status.startsWith("In federal")) {
-    return -1;
-  }
-  if (b.status.startsWith("In federal")) {
-    return 1;
   }
   return getTimeInSecs(a.status) - getTimeInSecs(b.status); // Compare in hospital seconds
 }
