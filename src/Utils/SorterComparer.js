@@ -27,11 +27,11 @@ function compareStatus(a, b) {
     return -1;
   }
 
-  if(!getTimeInSecs(a.status).isNaN()) {
+  if(!isNaN(getTimeInSecs(a.status))) {
     console.log("compareStatus error: getTimeInSecs returned NaN from" + a.status);
     return -1;
   }
-  if(!getTimeInSecs(b.status).isNaN()) {
+  if(!isNaN(getTimeInSecs(b.status))) {
     console.log("compareStatus error: getTimeInSecs returned NaN from" + b.status);
     return -1;
   }
