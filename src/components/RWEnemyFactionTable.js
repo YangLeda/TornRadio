@@ -270,9 +270,13 @@ function processFactionData(data) {
 function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     console.log("fillInCacheData key = " + playerObj["key"]);
+    if (data[playerObj["key"]] == undefined) {
+      console.log("fillInCacheData error undefined field for " + playerObj["key"]);
+      return;
+    }
     playerObj["age"] = data[playerObj["key"]]["age"];
     if (data[playerObj["key"]]["personalstats"] == undefined) {
-      console.log("fillInCacheData error undefined field in " + playerObj["key"]);
+      console.log("fillInCacheData error undefined field of personalstats for" + playerObj["key"]);
       return;
     }
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
