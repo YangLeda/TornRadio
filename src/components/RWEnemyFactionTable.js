@@ -249,7 +249,6 @@ function RWEnemyFactionTable() {
 function processFactionData(data) {
   let result = [];
   Object.keys(data.members).map((key, i) => {
-    console.log("processFactionData key = " + key);
     let playerObj = {};
     playerObj["key"] = `${key}`; // key in table
     playerObj["id"] = `${key}`; // not used in table display
@@ -269,7 +268,6 @@ function processFactionData(data) {
 
 function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
-    console.log("fillInCacheData key = " + playerObj["key"]);
     if (data[playerObj["key"]] == undefined) {
       console.log("fillInCacheData error undefined field for " + playerObj["key"]);
       return;
