@@ -165,7 +165,7 @@ function RWEnemyFactionTable() {
       fillInCacheData(processedFactionData, cacheData);
       setDataSource(processedFactionData);
     } catch (err) {
-      console.log("fetchFaction error" + err.message);
+      console.log("fetchFaction error " + err.message);
       setfetchFactionError(err.message);
     } finally {
       setIsFetchingFaction(false);
@@ -247,6 +247,7 @@ function RWEnemyFactionTable() {
 function processFactionData(data) {
   let result = [];
   Object.keys(data.members).map((key, i) => {
+    console.log("processFactionData key = " + key);
     let playerObj = {};
     playerObj["key"] = `${key}`; // key in table
     playerObj["id"] = `${key}`; // not used in table display
@@ -266,7 +267,11 @@ function processFactionData(data) {
 
 function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
+    console.log("fillInCacheData key = " + playerObj["key"]);
     playerObj["age"] = data[playerObj["key"]]["age"];
+    if (data[playerObj["key"]]["personalstats"] == undefined) {
+      return;
+    }
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
     playerObj["refill"] = data[playerObj["key"]]["personalstats"]["refills"];
     playerObj["drink"] = data[playerObj["key"]]["personalstats"]["energydrinkused"];
