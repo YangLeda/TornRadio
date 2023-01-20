@@ -158,6 +158,7 @@ function RWEnemyFactionTable() {
       }
       const actualData = await response.json();
       console.log("fetchFaction done size = " + Object.keys(actualData).length);
+      console.log(actualData);
       setFactionData(actualData);
       setfetchFactionError(null);
       let processedFactionData = processFactionData(actualData);
@@ -181,6 +182,7 @@ function RWEnemyFactionTable() {
       }
       const actualData = await response.json();
       console.log("fetchCache done size = " + Object.keys(actualData).length);
+      console.log(actualData);
       return actualData;
     } catch (err) {
       console.log("fetchCache error" + err.message);
