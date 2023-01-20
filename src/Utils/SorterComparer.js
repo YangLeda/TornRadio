@@ -17,6 +17,12 @@ function compareStatus(a, b) {
     // if is not in hospital
     return a.status.localeCompare(b.status);
   }
+  if (a.status.startsWith("In a")) {
+    return 1;
+  }
+  if (b.status.startsWith("In a")) {
+    return -1;
+  }
   return getTimeInSecs(a.status) - getTimeInSecs(b.status); // Compare in hospital seconds
 }
 
