@@ -3,12 +3,14 @@ function compareStatus(a, b) {
   map.set("green", 0); // Okay
   map.set("red", 1); // In hospital
   map.set("blue", 2); // Traveling
+
   if (a.status.startsWith("In federal")) {
     return 1;
   }
   if (b.status.startsWith("In federal")) {
     return -1;
   }
+
   if (map.get(a.color) - map.get(b.color) !== 0) {
     // if is different status
     return map.get(a.color) - map.get(b.color);
@@ -17,12 +19,14 @@ function compareStatus(a, b) {
     // if is not in hospital
     return a.status.localeCompare(b.status);
   }
+
   if (a.status.startsWith("In a")) {
     return 1;
   }
   if (b.status.startsWith("In a")) {
     return -1;
   }
+
   return getTimeInSecs(a.status) - getTimeInSecs(b.status); // Compare in hospital seconds
 }
 
@@ -43,7 +47,8 @@ function getTimeInSecs(str) {
   if (str.indexOf("hrs") < 0 && str.indexOf("mins") >= 0 && str.indexOf("secs") >= 0) {  // "In hospital for 2 mins 30 secs"
     return parseInt(splited[3]) * 60 + parseInt(splited[5]);
   }
-  return 
+  console.log("getTimeInSecs error");
+  return 0;
 }
 
 function compareOnline(str1, str2) {

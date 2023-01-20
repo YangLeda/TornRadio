@@ -272,6 +272,7 @@ function fillInCacheData(origin, data) {
     console.log("fillInCacheData key = " + playerObj["key"]);
     playerObj["age"] = data[playerObj["key"]]["age"];
     if (data[playerObj["key"]]["personalstats"] == undefined) {
+      console.log("fillInCacheData error undefined field in " + playerObj["key"]);
       return;
     }
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
