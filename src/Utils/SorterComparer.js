@@ -27,6 +27,15 @@ function compareStatus(a, b) {
     return -1;
   }
 
+  if(!getTimeInSecs(a.status).isNaN()) {
+    console.log("compareStatus error: getTimeInSecs returned NaN from" + a.status);
+    return -1;
+  }
+  if(!getTimeInSecs(b.status).isNaN()) {
+    console.log("compareStatus error: getTimeInSecs returned NaN from" + b.status);
+    return -1;
+  }
+
   return getTimeInSecs(a.status) - getTimeInSecs(b.status); // Compare in hospital seconds
 }
 
@@ -47,7 +56,7 @@ function getTimeInSecs(str) {
   if (str.indexOf("hrs") < 0 && str.indexOf("mins") >= 0 && str.indexOf("secs") >= 0) {  // "In hospital for 2 mins 30 secs"
     return parseInt(splited[3]) * 60 + parseInt(splited[5]);
   }
-  console.log("getTimeInSecs error");
+  console.log("getTimeInSecs error: no matched status string pattern");
   return 0;
 }
 
