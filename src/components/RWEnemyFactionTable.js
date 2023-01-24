@@ -336,7 +336,18 @@ function fillInCacheData(origin, data) {
 }
 
 function fillInSpyData(origin, data) {
-  console.log(data);
+  origin.forEach((playerObj) => {
+    if (data[playerObj["key"]] == undefined) {
+      console.log("fillInSpyData error undefined field for " + playerObj["key"]);
+      return;
+    }
+    playerObj["str"] = data[playerObj["key"]]["str"];
+    playerObj["def"] = data[playerObj["key"]]["def"];
+    playerObj["spd"] = data[playerObj["key"]]["spd"];
+    playerObj["dex"] = data[playerObj["key"]]["dex"];
+    playerObj["total"] = data[playerObj["key"]]["total"];
+  });
+  console.log("fillInSpyData done size = " + Object.keys(origin).length);
 }
 
 export default RWEnemyFactionTable;
