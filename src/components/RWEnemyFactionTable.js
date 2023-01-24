@@ -97,7 +97,7 @@ const columns = [
     dataIndex: "str",
     key: "str",
     sorter: (a, b) => a.str - b.str,
-    render: (text, record) => { text == "0" ? "" : text },
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Def",
