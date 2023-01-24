@@ -93,6 +93,36 @@ const columns = [
     onFilter: (value, record) => record.estimateBS.indexOf(value) === 0,
   },
   {
+    title: "Str",
+    dataIndex: "str",
+    key: "str",
+    sorter: (a, b) => a.str - b.str,
+  },
+  {
+    title: "Def",
+    dataIndex: "def",
+    key: "def",
+    sorter: (a, b) => a.def - b.def,
+  },
+  {
+    title: "Spd",
+    dataIndex: "spd",
+    key: "spd",
+    sorter: (a, b) => a.spd - b.spd,
+  },
+  {
+    title: "Dex",
+    dataIndex: "dex",
+    key: "dex",
+    sorter: (a, b) => a.dex - b.dex,
+  },
+  {
+    title: "Total",
+    dataIndex: "total",
+    key: "total",
+    sorter: (a, b) => a.total - b.total,
+  },
+  {
     title: "Online",
     dataIndex: "online",
     key: "online",
@@ -164,6 +194,8 @@ function RWEnemyFactionTable() {
       let processedFactionData = processFactionData(actualData);
       let cacheData = await fetchCache();
       fillInCacheData(processedFactionData, cacheData);
+      let spyData = await fetchSpy();
+      fillInSpyData(processedFactionData, spyData);
       setDataSource(processedFactionData);
     } catch (err) {
       console.log("fetchFaction error " + err.message);
@@ -189,6 +221,22 @@ function RWEnemyFactionTable() {
     }
   };
 
+  const fetchSpy = async () => {
+    console.log("fetchSpy start");
+    try {
+      const response = await fetch(`${API_URL}/spy`);
+      if (!response.ok) {
+        throw new Error(`fetchCache HTTP error: ${response.status}`);
+      }
+      const actualData = await response.json();
+      console.log("fetchSpy done size = " + Object.keys(actualData).length);
+      console.log(actualData);
+      return actualData;
+    } catch (err) {
+      console.log("fetchSpy error" + err.message);
+    }
+  };
+
   const updateTable = async () => {
     console.log("updateTable start");
     setIsFetchingFaction(true);
@@ -203,6 +251,8 @@ function RWEnemyFactionTable() {
       let processedFactionData = processFactionData(actualData);
       let cacheData = await fetchCache();
       fillInCacheData(processedFactionData, cacheData);
+      let spyData = await fetchSpy();
+      fillInSpyData(processedFactionData, spyData);
       setDataSource(processedFactionData);
     } catch (err) {
       console.log("updateTable error" + err.message);
@@ -283,6 +333,10 @@ function fillInCacheData(origin, data) {
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
   });
   console.log("fillInCacheData done size = " + Object.keys(origin).length);
+}
+
+function fillInSpyData(origin, data) {
+  console.log(data);
 }
 
 export default RWEnemyFactionTable;
