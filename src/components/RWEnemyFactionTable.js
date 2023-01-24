@@ -104,24 +104,28 @@ const columns = [
     dataIndex: "def",
     key: "def",
     sorter: (a, b) => a.def - b.def,
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Spd",
     dataIndex: "spd",
     key: "spd",
     sorter: (a, b) => a.spd - b.spd,
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Dex",
     dataIndex: "dex",
     key: "dex",
     sorter: (a, b) => a.dex - b.dex,
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Total",
     dataIndex: "total",
     key: "total",
     sorter: (a, b) => a.total - b.total,
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Online",
