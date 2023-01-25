@@ -6,7 +6,6 @@ import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
 import { Button, Table } from "antd";
 import { ClockCircleFilled } from "@ant-design/icons";
 import { compareOnline, compareStatus } from "../Utils/SorterComparer";
-import { NumericFormat } from 'react-number-format';
 
 const API_URL = "http://www.tornradio.com:3001";
 const columns = [
@@ -126,7 +125,7 @@ const columns = [
     dataIndex: "total",
     key: "total",
     sorter: (a, b) => a.total - b.total,
-    render: (text, record) =>(<NumericFormat value={text} thousandSeparator="," />),
+    render: (text, record) => { return text == "0" ? "" : text },
   },
   {
     title: "Online",
