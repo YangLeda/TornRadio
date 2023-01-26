@@ -100,17 +100,17 @@ const columns = [
     render: (text, record) => { return text == "0" ? "" : text.toLocaleString() },
   },
   {
-    title: "Def",
-    dataIndex: "def",
-    key: "def",
-    sorter: (a, b) => a.def - b.def,
-    render: (text, record) => { return text == "0" ? "" : text.toLocaleString() },
-  },
-  {
     title: "Spd",
     dataIndex: "spd",
     key: "spd",
     sorter: (a, b) => a.spd - b.spd,
+    render: (text, record) => { return text == "0" ? "" : text.toLocaleString() },
+  },
+  {
+    title: "Def",
+    dataIndex: "def",
+    key: "def",
+    sorter: (a, b) => a.def - b.def,
     render: (text, record) => { return text == "0" ? "" : text.toLocaleString() },
   },
   {
