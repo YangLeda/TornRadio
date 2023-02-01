@@ -96,7 +96,14 @@ const columns = [
     title: "Strength",
     dataIndex: "str",
     key: "str",
-    render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
+    render: (text, record) => {
+      return {
+        props: {
+          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
+      };
+    },
   },
   {
     title: "Speed",
@@ -105,7 +112,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "silver" : "" }
+          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -115,20 +122,41 @@ const columns = [
     title: "Defense",
     dataIndex: "def",
     key: "def",
-    render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
+    render: (text, record) => {
+      return {
+        props: {
+          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
+      };
+    },
   },
   {
     title: "Dexterity",
     dataIndex: "dex",
     key: "dex",
-    render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
+    render: (text, record) => {
+      return {
+        props: {
+          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
+      };
+    },
   },
   {
     title: "Total",
     dataIndex: "total",
     key: "total",
     sorter: (a, b) => a.total - b.total,
-    render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
+    render: (text, record) => {
+      return {
+        props: {
+          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
+      };
+    },
   },
   {
     title: "Online",
