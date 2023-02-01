@@ -99,7 +99,10 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            textAlign: right
+          }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -112,7 +115,10 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            textAlign: right
+          }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -125,7 +131,10 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            textAlign: right
+          }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -138,7 +147,10 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            textAlign: right
+          }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -152,7 +164,10 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            textAlign: right
+          }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
