@@ -18,7 +18,7 @@ const columns = [
     title: "Name[ID]",
     dataIndex: "nameId",
     key: "nameId",
-    sorter: (a, b) => a.nameId - b.nameId,
+    sorter: (a, b) => a.nameId.localeCompare(b.nameId),
     render: (text, record) => (
       <a href={"https://www.torn.com/profiles.php?XID=" + record.id} target="_blank" rel="noreferrer">
         {text}
@@ -93,31 +93,34 @@ const columns = [
     onFilter: (value, record) => record.estimateBS.indexOf(value) === 0,
   },
   {
-    title: "Str",
+    title: "Strength",
     dataIndex: "str",
     key: "str",
-    sorter: (a, b) => a.str - b.str,
     render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
   },
   {
-    title: "Spd",
+    title: "Speed",
     dataIndex: "spd",
     key: "spd",
-    sorter: (a, b) => a.spd - b.spd,
-    render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
+    render: (text, record) => {
+      return {
+        props: {
+          style: { background: (text == undefined || text == "0") ? "silver" : "" }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
+      };
+    },
   },
   {
-    title: "Def",
+    title: "Defense",
     dataIndex: "def",
     key: "def",
-    sorter: (a, b) => a.def - b.def,
     render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
   },
   {
-    title: "Dex",
+    title: "Dexterity",
     dataIndex: "dex",
     key: "dex",
-    sorter: (a, b) => a.dex - b.dex,
     render: (text, record) => { return (text == undefined || text == "0") ? "" : text.toLocaleString() },
   },
   {
@@ -140,21 +143,7 @@ const columns = [
         return <ClockCircleFilled style={{ color: "goldenrod" }} />;
       }
     },
-    filters: [
-      {
-        text: "Online",
-        value: "Online",
-      },
-      {
-        text: "Offline",
-        value: "Offline",
-      },
-      {
-        text: "Idle",
-        value: "Idle",
-      },
-    ],
-    onFilter: (value, record) => record.online.indexOf(value) === 0,
+    sorter: (a, b) => compareOnline(a.online, b.online),
   },
   {
     title: "Last Action",
