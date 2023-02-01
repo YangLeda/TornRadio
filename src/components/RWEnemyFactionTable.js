@@ -5,7 +5,7 @@ import "./RWEnemyFactionTable.css";
 import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
 import { Button, Table } from "antd";
 import { ClockCircleFilled } from "@ant-design/icons";
-import { compareOnline, compareStatus } from "../Utils/SorterComparer";
+import { compareStatus } from "../Utils/SorterComparer";
 
 const API_URL = "http://www.tornradio.com:3001";
 const columns = [
@@ -13,12 +13,12 @@ const columns = [
     title: "Index",
     dataIndex: "index",
     key: "index",
-    sorter: (a, b) => a.index - b.index,
   },
   {
     title: "Name[ID]",
     dataIndex: "nameId",
     key: "nameId",
+    sorter: (a, b) => a.nameId - b.nameId,
     render: (text, record) => (
       <a href={"https://www.torn.com/profiles.php?XID=" + record.id} target="_blank" rel="noreferrer">
         {text}
@@ -50,7 +50,7 @@ const columns = [
     sorter: (a, b) => a.refill - b.refill,
   },
   {
-    title: "Energy Drinks",
+    title: "Cans",
     dataIndex: "drink",
     key: "drink",
     sorter: (a, b) => a.drink - b.drink,
@@ -131,7 +131,6 @@ const columns = [
     title: "Online",
     dataIndex: "online",
     key: "online",
-    sorter: (a, b) => compareOnline(a.online, b.online),
     render: (text) => {
       if (text.indexOf("Offline") === 0) {
         return <ClockCircleFilled style={{ color: "Gray" }} />;
