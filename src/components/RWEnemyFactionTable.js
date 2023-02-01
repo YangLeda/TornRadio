@@ -343,7 +343,11 @@ function fillInCacheData(origin, data) {
 function fillInSpyData(origin, data) {
   origin.forEach((playerObj) => {
     if (data[playerObj["key"]] == undefined) {
-      console.log("fillInSpyData error undefined field for " + playerObj["key"]);
+      playerObj["str"] = 0;
+      playerObj["def"] = 0;
+      playerObj["spd"] = 0;
+      playerObj["dex"] = 0;
+      playerObj["total"] = 0;
       return;
     }
     playerObj["str"] = data[playerObj["key"]]["str"];
