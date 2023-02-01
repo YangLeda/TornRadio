@@ -99,7 +99,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -112,7 +112,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -125,7 +125,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -138,7 +138,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
@@ -152,7 +152,7 @@ const columns = [
     render: (text, record) => {
       return {
         props: {
-          style: { background: (text == undefined || text == "0") ? "#F1F1F1" : "" }
+          style: { background: (text == undefined || text == "0") ? "#FBFBFB" : "" }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
       };
