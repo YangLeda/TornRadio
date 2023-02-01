@@ -101,7 +101,7 @@ const columns = [
         props: {
           style: {
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
-            textAlign: right
+            textAlign: "right"
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
@@ -117,7 +117,7 @@ const columns = [
         props: {
           style: {
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
-            textAlign: right
+            textAlign: "right"
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
@@ -133,7 +133,7 @@ const columns = [
         props: {
           style: {
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
-            textAlign: right
+            textAlign: "right"
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
@@ -149,7 +149,7 @@ const columns = [
         props: {
           style: {
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
-            textAlign: right
+            textAlign: "right"
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
@@ -166,7 +166,7 @@ const columns = [
         props: {
           style: {
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
-            textAlign: right
+            textAlign: "right"
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : text.toLocaleString()}</div>
