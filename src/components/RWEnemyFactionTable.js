@@ -5,7 +5,7 @@ import "./RWEnemyFactionTable.css";
 import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
 import { Button, Table } from "antd";
 import { ClockCircleFilled } from "@ant-design/icons";
-import { compareStatus } from "../Utils/SorterComparer";
+import { compareOnline, compareStatus } from "../Utils/SorterComparer";
 
 const API_URL = "http://www.tornradio.com:3001";
 const columns = [
