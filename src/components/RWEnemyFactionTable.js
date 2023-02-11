@@ -125,9 +125,9 @@ const columns = [
     },
   },
   {
-    title: "Defense",
-    dataIndex: "def",
-    key: "def",
+    title: "Dexterity",
+    dataIndex: "dex",
+    key: "dex",
     render: (text, record) => {
       return {
         props: {
@@ -141,9 +141,9 @@ const columns = [
     },
   },
   {
-    title: "Dexterity",
-    dataIndex: "dex",
-    key: "dex",
+    title: "Defense",
+    dataIndex: "def",
+    key: "def",
     render: (text, record) => {
       return {
         props: {
