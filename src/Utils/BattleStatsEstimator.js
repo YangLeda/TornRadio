@@ -71,10 +71,10 @@ function estimate(personalDataJSON) {
 }
 
 function compareEstimateBS(str1, str2) {
-  if (str1 === "N/A") {
+  if (str1 == "N/A" || str1 == "" || str1 == null) {
     return 1;
   }
-  if (str2 === "N/A") {
+  if (str2 == "N/A" || str2 == "" || str2 == null) {
     return -1;
   }
   let map = new Map();
