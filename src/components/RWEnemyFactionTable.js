@@ -314,7 +314,7 @@ function RWEnemyFactionTable() {
   // show Data
   return (
     <div className="App">
-      <Header title="Faction Member List" />
+      <Header title="Ranked War Enemy Faction Member List" />
       <main id="main">
         <p>
           <b>Faction: </b>
