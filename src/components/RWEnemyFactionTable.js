@@ -210,9 +210,7 @@ function RWEnemyFactionTable() {
   const [dataSource, setDataSource] = useState(null);
 
   useEffect(() => {
-    console.log("useEffect() start");
     fetchFaction();
-    console.log("useEffect() end");
   }, []);
 
   const fetchFaction = async () => {
@@ -355,7 +353,6 @@ function processFactionData(data) {
 function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     if (data[playerObj["key"]] == undefined) {
-      console.log("fillInCacheData error undefined field for " + playerObj["key"]);
       return;
     }
     playerObj["age"] = data[playerObj["key"]]["age"];

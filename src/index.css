@@ -8,3 +8,17 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+canvas {
+  background-image: url("../public/map.jpg");  
+  background-position: top 0px left 0px;  
+  background-repeat: no-repeat;
+}
+
+.highlight_1 {
+  background-color: #f1b5ae;
+}
+
+.highlight_2 {
+  background-color: #b0c0e8;
+}
