@@ -18,11 +18,11 @@ function bw_estimate(personalDataJSON) {
     D = g.spetaken || 0,
     A = g.victaken || 0,
     F = g.xantaken || 0,
-    O = h.age || 1,
+    O = personalDataJSON.age || 1,
     C = g.trainsreceived || 0,
     M = w + k + F,
-    T = ((h.xan_lsd_ecs = M) / O).toFixed(2);
-  h.average_drugs = T;
+    T = ((personalDataJSON.xan_lsd_ecs = M) / O).toFixed(2);
+  personalDataJSON.average_drugs = T;
   var P = g.refills || 0,
     E = g.statenhancersused || 0,
     N = g.useractivity || 0,
@@ -35,16 +35,16 @@ function bw_estimate(personalDataJSON) {
     x = g.daysbeendonator || 0,
     y = Math.min(O, parseInt((new Date - new Date("2011/11/22")) / 864e5));
   const tt = Math.min(x / y, 1);
-  h.donator_percent = tt.toFixed(2);
+  personalDataJSON.donator_percent = tt.toFixed(2);
   const et = 480 + 240 * tt;
   const at = 611255 / et;
   console.log(`统计DP时间 ${x}d，最多 ${y}d，DP比例：${Qt(tt)}，一天完整能量：${et.toFixed(2)}，实现CAP需要活跃：${at.toFixed(2)}天`);
-  y = h.last_action.timestamp || 0;
+  y = personalDataJSON.last_action.timestamp || 0;
   let t = parseInt((new Date).getTime() / 1e3) - y,
     e = "";
-  86400 < t && (e += parseInt(t / 86400) + "天", t %= 86400), 3600 < t && (e += parseInt(t / 3600) + "时", t %= 3600), 60 < t && (e += parseInt(t / 60) + "分", t %= 60), e += t + "秒", h.last_action_details = e;
-  const nt = h.last_action.relative;
-  h.last_action_brief = nt.replace(" minute ago", "m").replace(" minutes ago", "m").replace(" hours ago", "h").replace(" hour ago", "h").replace(" days ago", "d").replace(" day ago", "d");
+  86400 < t && (e += parseInt(t / 86400) + "天", t %= 86400), 3600 < t && (e += parseInt(t / 3600) + "时", t %= 3600), 60 < t && (e += parseInt(t / 60) + "分", t %= 60), e += t + "秒", personalDataJSON.last_action_details = e;
+  const nt = personalDataJSON.last_action.relative;
+  personalDataJSON.last_action_brief = nt.replace(" minute ago", "m").replace(" minutes ago", "m").replace(" hours ago", "h").replace(" hour ago", "h").replace(" days ago", "d").replace(" day ago", "d");
   let a = 0;
   nt.includes("d") && (a = parseInt(nt.replace(/[^0-9|-]/gi, "")));
   const it = Math.max(1, 21 * (O - a) / 24);
@@ -55,15 +55,15 @@ function bw_estimate(personalDataJSON) {
   console.log(`ched_active_days: 3*${ot.toFixed(2)}(activity) + ${rt.toFixed(2)}(travel) = ${st.toFixed(2)}`);
   const lt = (75 * v + 210 * w + 52.5 * _ + 425 * k + 215 * $ + 430 * I + 209.5 * S + 301 * D + 300 * A + 420 * F) / 1440;
   console.log(`drug_active_days: ${lt.toFixed(2)}`);
-  v = h.criminalrecord.other || 0, w = h.criminalrecord.selling_illegal_products || 0, _ = h.criminalrecord.theft || 0, $ = h.criminalrecord.drug_deals || 0, I = h.criminalrecord.computer_crimes || 0, S = h.criminalrecord.murder || 0, D = h.criminalrecord.fraud_crimes || 0, A = h.criminalrecord.auto_theft || 0;
+  v = personalDataJSON.criminalrecord.other || 0, w = personalDataJSON.criminalrecord.selling_illegal_products || 0, _ = personalDataJSON.criminalrecord.theft || 0, $ = personalDataJSON.criminalrecord.drug_deals || 0, I = personalDataJSON.criminalrecord.computer_crimes || 0, S = personalDataJSON.criminalrecord.murder || 0, D = personalDataJSON.criminalrecord.fraud_crimes || 0, A = personalDataJSON.criminalrecord.auto_theft || 0;
   let n = .11 * _ + .5 * I + .66 * S + D + .66 * A + .05 * $;
-  n < 0 && (n = 0), h.estimate_ace = parseInt(n), 12862 < n ? h.estimate_nnb = 60 : 9171 < n ? h.estimate_nnb = 55 : 5950 < n ? h.estimate_nnb = 50 : 4324 < n ? h.estimate_nnb = 45 : 2750 < n ? h.estimate_nnb = 40 : 1198 < n ? h.estimate_nnb = 35 : 450 < n ? h.estimate_nnb = 30 : 250 < n ? h.estimate_nnb = 25 : 100 < n ? h.estimate_nnb = 20 : 50 < n ? h.estimate_nnb = 15 : h.estimate_nnb = 10;
+  n < 0 && (n = 0), personalDataJSON.estimate_ace = parseInt(n), 12862 < n ? personalDataJSON.estimate_nnb = 60 : 9171 < n ? personalDataJSON.estimate_nnb = 55 : 5950 < n ? personalDataJSON.estimate_nnb = 50 : 4324 < n ? personalDataJSON.estimate_nnb = 45 : 2750 < n ? personalDataJSON.estimate_nnb = 40 : 1198 < n ? personalDataJSON.estimate_nnb = 35 : 450 < n ? personalDataJSON.estimate_nnb = 30 : 250 < n ? personalDataJSON.estimate_nnb = 25 : 100 < n ? personalDataJSON.estimate_nnb = 20 : 50 < n ? personalDataJSON.estimate_nnb = 15 : personalDataJSON.estimate_nnb = 10;
   let i = 5 * (2 * v + 3 * w + 5 * _ + 8 * $ / .8 + 9 * I / .75 + 10 * S / .75 + 11 * D / .95 + 12 * A / .7) / 1440;
   i < at && (W = Math.min(at / i, 3), console.log(`新手 crime_active_days 补偿系数：${W}`), i *= W), console.log(`crime_active_days: ${i.toFixed(2)}`);
   var W = Math.min(it, Math.max(st, lt, i)).toFixed(2);
-  console.log(`估算活跃天数: ${W}`), h.estimate_active_days = W;
+  console.log(`估算活跃天数: ${W}`), personalDataJSON.estimate_active_days = W;
   O = parseInt(75 * C + 30 * W + 70 * O);
-  console.log(`估算WS: ${O}`), h.estimate_ws = O;
+  console.log(`估算WS: ${O}`), personalDataJSON.estimate_ws = O;
   const dt = parseInt(et * W);
   console.log(`估算的自然恢复能量: ${dt}`);
   W = parseInt(150 * P), P = 250 * F + 50 * k, j = 20 * j, B = 150 * B;
@@ -73,7 +73,7 @@ function bw_estimate(personalDataJSON) {
   const pt = B + M + R;
   console.log(`消耗能量：${B}(attack) + ${M}(revive) + ${R}(dump) = ${pt}`);
   let o = dt + ct - pt;
-  o < 0 && (o = 0), console.log(`总锻炼能量：${dt}(自然) + ${ct}(物品) - ${pt}(消耗) = ${o}`), h.total_energy = o.toFixed(0), h.nature_energy = dt.toFixed(0), h.item_energy = ct.toFixed(0), h.expend_energy = pt.toFixed(0);
+  o < 0 && (o = 0), console.log(`总锻炼能量：${dt}(自然) + ${ct}(物品) - ${pt}(消耗) = ${o}`), personalDataJSON.total_energy = o.toFixed(0), personalDataJSON.nature_energy = dt.toFixed(0), personalDataJSON.item_energy = ct.toFixed(0), personalDataJSON.expend_energy = pt.toFixed(0);
   let r = 40;
   var L = [2, 2.8, 3.2, 3.2, 3.6, 3.8, 3.7, 4, 4.8, 4.8, 5.2, 5.2, 5.4, 5.8, 5.8, 6, 6.4, 6.6, 6.8, 7, 7, 7, 7, 7.3],
     G = [200, 500, 1e3, 2e3, 2750, 3e3, 3500, 4e3, 6e3, 7e3, 8e3, 11e3, 12420, 18e3, 18100, 24140, 31260, 36610, 46640, 56520, 67775, 84535, 106305, Number.MAX_SAFE_INTEGER];
@@ -133,16 +133,16 @@ function bw_estimate(personalDataJSON) {
     };
   let p = 0;
   for (X in V)
-    if (0 == h.rank.indexOf(X)) {
-      p = V[X], h.rank_value = p, h.rank_name = X;
+    if (0 == personalDataJSON.rank.indexOf(X)) {
+      p = V[X], personalDataJSON.rank_value = p, personalDataJSON.rank_name = X;
       break
-    } E = h.rank.split(" ");
-  if (h.rank_title = E[E.length - 1], console.log(`Rank: value = #${p}, name = ${h.rank_name}, title = ${h.rank_title}, full = ${h.rank}`), 0 < p && r < Number.MAX_SAFE_INTEGER) {
+    } E = personalDataJSON.rank.split(" ");
+  if (personalDataJSON.rank_title = E[E.length - 1], console.log(`Rank: value = #${p}, name = ${personalDataJSON.rank_name}, title = ${personalDataJSON.rank_title}, full = ${personalDataJSON.rank}`), 0 < p && r < Number.MAX_SAFE_INTEGER) {
     --p;
-    var Y = h.level || 0;
+    var Y = personalDataJSON.level || 0;
     for (let t = 0; t < J.length; ++t) Y >= J[t] && --p;
     console.log(`Rank 减掉 level trigger 还剩下 ${p}`);
-    var Q = h.criminalrecord.total || 0;
+    var Q = personalDataJSON.criminalrecord.total || 0;
     for (let t = 0; t < U.length; ++t) Q >= U[t] && --p;
     console.log(`Rank 减掉 crimes trigger 还剩下 ${p}`);
     var Z = g.networth || 0;
@@ -152,14 +152,18 @@ function bw_estimate(personalDataJSON) {
       e = Number.MAX_SAFE_INTEGER;
     p <= 0 ? e = F[0] : p >= k.length ? t = k[k.length - 1] : (t = k[p - 1], e = F[p]), console.log(`根据Rank推算bs区间：[${t}, ${e})`), r < t ? (c = `${c} ~ ${Qt(t)}`, console.log(`估算总bs小于按Rank推算的下限值：${Qt(t)}`)) : r > e ? (c = `${Qt(e)} ~ ${c}`, console.log(`估算总bs高于按Rank推算的上限值：${Qt(e)}`)) : console.log("估算总bs符合按Rank推算的区间")
   }
-  h.estimate_bs = r, h.estimate_bs_display = c, h.attackWinRatio = m / T, h.defendWinRatio = (b + u) / (b + u + f), ut(h)
-  console.log(h.estimate_bs + "|" + h.estimate_bs_display);
+  personalDataJSON.estimate_bs = r, personalDataJSON.estimate_bs_display = c, personalDataJSON.attackWinRatio = m / T, personalDataJSON.defendWinRatio = (b + u) / (b + u + f), ut(personalDataJSON)
+  console.log(personalDataJSON.estimate_bs + "|" + personalDataJSON.estimate_bs_display);
   return "1";
 }
 
 function bw_compareEstimateBS(str1, str2) {
 
   return 0;
+}
+
+function Qt(t) {
+  return t < 0 ? "-" + Qt(-t) : 0 == t ? "0" : t <= 1 ? (100 * t).toFixed(2) + "%" : t < 1e3 ? "" + parseInt(t) : 1e3 <= t && t < 1e6 ? (t / 1e3).toFixed(2) + "k" : 1e6 <= t && t < 1e9 ? (t / 1e6).toFixed(2) + "m" : 1e9 <= t && t < 1e12 ? (t / 1e9).toFixed(2) + "b" : 1e12 <= t && t < 1e15 ? (t / 1e12).toFixed(2) + "t" : 1e15 <= t ? "MAX" : void 0
 }
 
 export { bw_estimate, bw_compareEstimateBS };
