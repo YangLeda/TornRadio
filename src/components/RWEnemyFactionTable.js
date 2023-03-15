@@ -187,7 +187,7 @@ const columns = [
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
           }
         },
-        children: <div>{(text == undefined || text == "0") ? "N/A" : unixToUTC(text)}</div>
+        children: <div>{(text == undefined || text == "0") ? "" : unixToUTC(text)}</div>
       };
     },
   },
