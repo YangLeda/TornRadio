@@ -181,6 +181,21 @@ const columns = [
     },
   },
   {
+    title: "Spy",
+    dataIndex: "source",
+    key: "source",
+    render: (text, record) => {
+      return {
+        props: {
+          style: {
+            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+          }
+        },
+        children: <div>{(text == undefined || text == "0") ? "N/A" : text}</div>
+      };
+    },
+  },
+  {
     title: "Online",
     dataIndex: "online",
     key: "online",
@@ -382,6 +397,7 @@ function fillInSpyData(origin, data) {
     playerObj["spd"] = data[playerObj["key"]]["spd"];
     playerObj["dex"] = data[playerObj["key"]]["dex"];
     playerObj["total"] = data[playerObj["key"]]["total"];
+    playerObj["source"] = data[playerObj["key"]]["source"];
   });
 }
 
