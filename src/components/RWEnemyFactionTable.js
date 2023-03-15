@@ -97,7 +97,7 @@ const columns = [
     title: "冰蛙",
     dataIndex: "BWestimateBS",
     key: "BWestimateBS",
-    sorter: (a, b) => bw_compareEstimateBS(a.BWestimateBS, b.BWestimateBS),
+    sorter: (a, b) => bw_compareEstimateBS(a, b),
   },
   {
     title: "Strength",
@@ -361,7 +361,9 @@ function fillInCacheData(origin, data) {
     playerObj["refill"] = data[playerObj["key"]]["personalstats"]["refills"];
     playerObj["drink"] = data[playerObj["key"]]["personalstats"]["energydrinkused"];
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
-    playerObj["BWestimateBS"] = bw_estimate(data[playerObj["key"]]);
+    let bw = bw_estimate(data[playerObj["key"]]);
+    playerObj["BWestimateBS"] = bw.bw_display_estimate;
+    playerObj["bw_true_estimate"] = bw.bw_true_estimate;
   });
 }
 
