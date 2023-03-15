@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import "./RWEnemyFactionTable.css";
 import { estimate, compareEstimateBS } from "../Utils/BattleStatsEstimator";
+import { bw_estimate, bw_compareEstimateBS } from "../Utils/BWEstimator";
 import { Button, Table } from "antd";
 import { ClockCircleFilled } from "@ant-design/icons";
 import { compareOnline, compareStatus } from "../Utils/SorterComparer";
@@ -91,6 +92,12 @@ const columns = [
       },
     ],
     onFilter: (value, record) => record.estimateBS.indexOf(value) === 0,
+  },
+  {
+    title: "冰蛙",
+    dataIndex: "BWestimateBS",
+    key: "BWestimateBS",
+    sorter: (a, b) => bw_compareEstimateBS(a.BWestimateBS, b.BWestimateBS),
   },
   {
     title: "Strength",
@@ -354,6 +361,7 @@ function fillInCacheData(origin, data) {
     playerObj["refill"] = data[playerObj["key"]]["personalstats"]["refills"];
     playerObj["drink"] = data[playerObj["key"]]["personalstats"]["energydrinkused"];
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
+    playerObj["BWestimateBS"] = bw_estimate(data[playerObj["key"]]);
   });
 }
 
