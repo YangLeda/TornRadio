@@ -19,7 +19,6 @@ const columns = [
     title: "Name[ID]",
     dataIndex: "nameId",
     key: "nameId",
-    sorter: (a, b) => a.nameId.localeCompare(b.nameId),
     render: (text, record) => (
       <a href={"https://www.torn.com/profiles.php?XID=" + record.id} target="_blank" rel="noreferrer">
         {text}
@@ -42,19 +41,16 @@ const columns = [
     title: "Xanax",
     dataIndex: "xanax",
     key: "xanax",
-    sorter: (a, b) => a.xanax - b.xanax,
   },
   {
     title: "Refills",
     dataIndex: "refill",
     key: "refill",
-    sorter: (a, b) => a.refill - b.refill,
   },
   {
     title: "Cans",
     dataIndex: "drink",
     key: "drink",
-    sorter: (a, b) => a.drink - b.drink,
   },
   {
     title: "Est. Stats",
@@ -181,7 +177,7 @@ const columns = [
     },
   },
   {
-    title: "Spy",
+    title: "Spy Source",
     dataIndex: "source",
     key: "source",
     render: (text, record) => {
@@ -191,7 +187,7 @@ const columns = [
             background: (text == undefined || text == "0") ? "#FBFBFB" : "",
           }
         },
-        children: <div>{(text == undefined || text == "0") ? "N/A" : text}</div>
+        children: <div>{(text == undefined || text == "0") ? "N/A" : unixToUTC(text)}</div>
       };
     },
   },
@@ -200,15 +196,30 @@ const columns = [
     dataIndex: "online",
     key: "online",
     render: (text) => {
-      if (text.indexOf("Offline") === 0) {
+      if (text.indexOf("Offline") == 0) {
         return <ClockCircleFilled style={{ color: "Gray" }} />;
-      } else if (text.indexOf("Online") === 0) {
+      } else if (text.indexOf("Online") == 0) {
         return <ClockCircleFilled style={{ color: "forestgreen" }} />;
-      } else if (text.indexOf("Idle") === 0) {
+      } else if (text.indexOf("Idle") == 0) {
         return <ClockCircleFilled style={{ color: "goldenrod" }} />;
       }
     },
     sorter: (a, b) => compareOnline(a.online, b.online),
+    filters: [
+      {
+        text: "Offline",
+        value: "Offline",
+      },
+      {
+        text: "Idle",
+        value: "Idle",
+      },
+      {
+        text: "Online",
+        value: "Online",
+      },
+    ],
+    onFilter: (value, record) => record.online.indexOf(value) === 0,
   },
   {
     title: "Last Action",
@@ -399,6 +410,15 @@ function fillInSpyData(origin, data) {
     playerObj["total"] = data[playerObj["key"]]["total"];
     playerObj["source"] = data[playerObj["key"]]["source"];
   });
+}
+
+function unixToUTC(text) {
+  if (isNaN(text)) {
+    return text;
+  }
+  const time = parseInt(text);
+  const date = new Date(time * 1000);
+  return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear();
 }
 
 export default RWEnemyFactionTable;
