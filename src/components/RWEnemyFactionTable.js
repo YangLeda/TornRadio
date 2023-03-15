@@ -210,20 +210,16 @@ function RWEnemyFactionTable() {
   const [dataSource, setDataSource] = useState(null);
 
   useEffect(() => {
-    console.log("useEffect() start");
     fetchFaction();
-    console.log("useEffect() end");
   }, []);
 
   const fetchFaction = async () => {
-    console.log("fetchFaction start");
     try {
       const response = await fetch(`${API_URL}/faction`);
       if (!response.ok) {
         throw new Error(`fetchFaction HTTP error: ${response.status}`);
       }
       const actualData = await response.json();
-      console.log("fetchFaction done size = " + Object.keys(actualData).length);
       console.log(actualData);
       setFactionData(actualData);
       setfetchFactionError(null);
@@ -242,14 +238,12 @@ function RWEnemyFactionTable() {
   };
 
   const fetchCache = async () => {
-    console.log("fetchCache start");
     try {
       const response = await fetch(`${API_URL}/cache`);
       if (!response.ok) {
         throw new Error(`fetchCache HTTP error: ${response.status}`);
       }
       const actualData = await response.json();
-      console.log("fetchCache done size = " + Object.keys(actualData).length);
       console.log(actualData);
       return actualData;
     } catch (err) {
@@ -258,14 +252,12 @@ function RWEnemyFactionTable() {
   };
 
   const fetchSpy = async () => {
-    console.log("fetchSpy start");
     try {
       const response = await fetch(`${API_URL}/spy`);
       if (!response.ok) {
         throw new Error(`fetchCache HTTP error: ${response.status}`);
       }
       const actualData = await response.json();
-      console.log("fetchSpy done size = " + Object.keys(actualData).length);
       console.log(actualData);
       return actualData;
     } catch (err) {
@@ -274,7 +266,6 @@ function RWEnemyFactionTable() {
   };
 
   const updateTable = async () => {
-    console.log("updateTable start");
     setIsFetchingFaction(true);
     try {
       const response = await fetch(`${API_URL}/faction`);
@@ -282,7 +273,6 @@ function RWEnemyFactionTable() {
         throw new Error(`updateTable HTTP error: ${response.status}`);
       }
       const actualData = await response.json();
-      console.log("updateTable done size = " + Object.keys(actualData).length);
       setfetchFactionError(null);
       let processedFactionData = processFactionData(actualData);
       let cacheData = await fetchCache();
@@ -348,19 +338,16 @@ function processFactionData(data) {
     result.push(playerObj);
     return true;
   });
-  console.log("processFactionData done size = " + Object.keys(result).length);
   return result;
 }
 
 function fillInCacheData(origin, data) {
   origin.forEach((playerObj) => {
     if (data[playerObj["key"]] == undefined) {
-      console.log("fillInCacheData error undefined field for " + playerObj["key"]);
       return;
     }
     playerObj["age"] = data[playerObj["key"]]["age"];
     if (data[playerObj["key"]]["personalstats"] == undefined) {
-      console.log("fillInCacheData error undefined field of personalstats for" + playerObj["key"]);
       return;
     }
     playerObj["xanax"] = data[playerObj["key"]]["personalstats"]["xantaken"];
@@ -368,7 +355,6 @@ function fillInCacheData(origin, data) {
     playerObj["drink"] = data[playerObj["key"]]["personalstats"]["energydrinkused"];
     playerObj["estimateBS"] = estimate(data[playerObj["key"]]);
   });
-  console.log("fillInCacheData done size = " + Object.keys(origin).length);
 }
 
 function fillInSpyData(origin, data) {
@@ -387,7 +373,6 @@ function fillInSpyData(origin, data) {
     playerObj["dex"] = data[playerObj["key"]]["dex"];
     playerObj["total"] = data[playerObj["key"]]["total"];
   });
-  console.log("fillInSpyData done size = " + Object.keys(origin).length);
 }
 
 export default RWEnemyFactionTable;
