@@ -87,13 +87,35 @@ const columns = [
         value: "over 200m",
       },
     ],
-    onFilter: (value, record) => record.estimateBS.indexOf(value) === 0,
+    onFilter: (value, record) => record.estimateBS.indexOf(value) == 0,
   },
   {
     title: "冰蛙",
     dataIndex: "BWestimateBS",
     key: "BWestimateBS",
     sorter: (a, b) => bw_compareEstimateBS(a, b),
+    filters: [
+      {
+        text: "Over 1b",
+        value: 1,
+      },
+      {
+        text: "Under 1b",
+        value: -1,
+      },
+    ],
+    onFilter: (value, record) => record.BWestimateBS.indexOf("b") * value > 0,
+    render: (text, record) => {
+      return {
+        props: {
+          style: {
+            background: (text == undefined || text == "0") ? "#F5F5F5" : text.indexOf("b") > 0 ? "#ffebee" : text.indexOf("m") > 0 ? "#FFFFE0" : "#EAFFF1",
+            textAlign: "right"
+          }
+        },
+        children: <div>{(text == undefined || text == "0") ? "" : text}</div>
+      };
+    },
   },
   {
     title: "Strength",
@@ -103,7 +125,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
             textAlign: "right"
           }
         },
@@ -119,7 +141,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
             textAlign: "right"
           }
         },
@@ -135,7 +157,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
             textAlign: "right"
           }
         },
@@ -151,7 +173,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
             textAlign: "right"
           }
         },
@@ -168,7 +190,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
             textAlign: "right"
           }
         },
@@ -184,7 +206,7 @@ const columns = [
       return {
         props: {
           style: {
-            background: (text == undefined || text == "0") ? "#FBFBFB" : "",
+            background: (text == undefined || text == "0") ? "#F5F5F5" : "",
           }
         },
         children: <div>{(text == undefined || text == "0") ? "" : unixToUTC(text)}</div>
