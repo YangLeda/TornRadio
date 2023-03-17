@@ -37,6 +37,7 @@ async function handleMonitor() {
         return;
     } else {
         last_api_timestamp = json["last_api_timestamp"];
+        tick();
     }
     if (json["notifications"]["messages"] > 0 || json["notifications"]["events"] > 0) {
         notificationsP.innerText = json["notifications"]["messages"] > 0 ? "Mails: " + json["notifications"]["messages"] + " " : "" +
