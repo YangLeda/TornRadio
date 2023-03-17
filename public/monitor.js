@@ -1,5 +1,5 @@
-const FETCH_MONITOR_INTERVAL = 30000;  // 30s
-const API_REQUEST_DELAY = 5000;  // 5s
+const FETCH_MONITOR_INTERVAL = 30000;  // 10s
+const API_REQUEST_DELAY = 1000;  // 1s
 
 const GREEN = "#b2e672";
 const RED = "#f96b85";
