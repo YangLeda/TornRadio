@@ -1,9 +1,13 @@
-
 const FETCH_MONITOR_INTERVAL = 30000;  // 30s
 const API_REQUEST_DELAY = 5000;  // 5s
 
+const GREEN = "#b2e672";
+const RED = "#f96b85";
+const YELLOW = "#fffd88";
+
 const notificationsP = document.getElementById("notifications");
-const eventsP = document.getElementById("events");
+const eventsDiv = document.getElementById("events");
+const eventsP = document.getElementById("events_p");
 const errorsP = document.getElementById("errors");
 
 handleMonitor();
@@ -15,37 +19,35 @@ async function handleMonitor() {
     const json = await fetchMonitor();
     if (!json) {
         errorsP.innerText = "Failed to fetch from tornradio server";
-        errorsP.style.background = "red";
+        errorsP.style.background = YELLOW;
         return;
     }
     if (json["server_error"]) {
         errorsP.innerText = "Error message from tornradio server: " + json["server_error"];
-        errorsP.style.background = "red";
+        errorsP.style.background = YELLOW;
         return;
     } else {
-        const timeStr = moment.unix(json["last_api_timestamp"]).tz("Asia/Shanghai").format("DD/MM/YYYY HH:mm:ss");
-        const durationStr = moment.unix(moment().unix() - json["last_api_timestamp"]).format("HH:mm:ss") + " ago";
-        errorsP.innerText = timeStr + " " + durationStr;
-        errorsP.style.background = "green";
+        errorsP.innerText = unixToString(json["last_api_timestamp"]);
+        errorsP.style.background = GREEN;
     }
     if (json["notifications"]["messages"] > 0 || json["notifications"]["events"] > 0) {
         notificationsP.innerText = json["notifications"]["messages"] > 0 ? "Mails: " + json["notifications"]["messages"] + " " : "" +
             json["notifications"]["events"] > 0 ? "Events: " + json["notifications"]["events"] : "";
-        notificationsP.style.background = "red";
+        notificationsP.style.background = RED;
     } else {
         notificationsP.innerText = "";
-        notificationsP.style.background = "green";
+        notificationsP.style.background = GREEN;
     }
     if (json["events"].length > 0) {
         let textStr = "";
-        for (let event in json["events"]) {
+        for (let event of json["events"]) {
             textStr += event + "\n";
         }
         eventsP.innerText = textStr;
-        eventsP.style.background = "red";
+        eventsDiv.style.background = RED;
     } else {
         eventsP.innerText = "";
-        eventsP.style.background = "green";
+        eventsDiv.style.background = GREEN;
     }
 }
 
@@ -66,4 +68,12 @@ async function fetchMonitor() {
     } catch (error) {
         return null;
     }
+}
+
+function unixToString(unix_timestamp) {
+    let utcApiDate = new Date(unix_timestamp * 1000);
+    let durationInSeconds = Math.floor(Date.now() / 1000) - unix_timestamp;
+    let durationMinutes = Math.floor(durationInSeconds / 60);
+    let durationSeconds = durationInSeconds % 60;
+    return utcApiDate.toLocaleString() + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
 }
