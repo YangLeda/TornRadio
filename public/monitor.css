@@ -10,6 +10,9 @@ body {
     width: 100%;
     margin: 0;
     font-size: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #errors {
@@ -18,6 +21,9 @@ body {
     height: 50px;
     width: 100%;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #events {
@@ -28,6 +34,9 @@ body {
     text-align: center;
     vertical-align: middle;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #events_p {
