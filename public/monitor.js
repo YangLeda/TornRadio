@@ -26,13 +26,13 @@ async function handleMonitor() {
     const json = await fetchMonitor();
     if (!json) {
         errorsP.innerText = "Failed to fetch from tornradio server";
-        errorsP.style.background = YELLOW;
+        errorsP.style.background = RED;
         last_api_timestamp = -1;
         return;
     }
     if (json["server_error"]) {
         errorsP.innerText = "Error message from tornradio server: " + json["server_error"];
-        errorsP.style.background = YELLOW;
+        errorsP.style.background = RED;
         last_api_timestamp = -1;
         return;
     } else {
@@ -99,6 +99,6 @@ function tick() {
     if (durationMinutes < 1) {
         errorsP.style.background = GREEN;
     } else {
-        errorsP.style.background = YELLOW;
+        errorsP.style.background = RED;
     }
 }
