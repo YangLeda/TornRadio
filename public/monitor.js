@@ -10,25 +10,33 @@ const eventsDiv = document.getElementById("events");
 const eventsP = document.getElementById("events_p");
 const errorsP = document.getElementById("errors");
 
+let last_api_timestamp = -1;
+
 handleMonitor();
 setInterval(async () => {
     handleMonitor();
 }, FETCH_MONITOR_INTERVAL);
+
+tick();
+setInterval(async () => {
+    tick();
+}, 1000);
 
 async function handleMonitor() {
     const json = await fetchMonitor();
     if (!json) {
         errorsP.innerText = "Failed to fetch from tornradio server";
         errorsP.style.background = YELLOW;
+        last_api_timestamp = -1;
         return;
     }
     if (json["server_error"]) {
         errorsP.innerText = "Error message from tornradio server: " + json["server_error"];
         errorsP.style.background = YELLOW;
+        last_api_timestamp = -1;
         return;
     } else {
-        errorsP.innerText = unixToString(json["last_api_timestamp"]);
-        errorsP.style.background = GREEN;
+        last_api_timestamp = json["last_api_timestamp"];
     }
     if (json["notifications"]["messages"] > 0 || json["notifications"]["events"] > 0) {
         notificationsP.innerText = json["notifications"]["messages"] > 0 ? "Mails: " + json["notifications"]["messages"] + " " : "" +
@@ -76,4 +84,20 @@ function unixToString(unix_timestamp) {
     let durationMinutes = Math.floor(durationInSeconds / 60);
     let durationSeconds = durationInSeconds % 60;
     return utcApiDate.toLocaleString() + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
+}
+
+function tick() {
+    if (last_api_timestamp <= 0) {
+        return;
+    }
+    let localeString = new Date(last_api_timestamp * 1000).toLocaleString();
+    let durationInSeconds = Math.floor(Date.now() / 1000) - last_api_timestamp;
+    let durationMinutes = Math.floor(durationInSeconds / 60);
+    let durationSeconds = durationInSeconds % 60;
+    errorsP.innerText = localeString + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
+    if (durationMinutes < 1) {
+        errorsP.style.background = GREEN;
+    } else {
+        errorsP.style.background = YELLOW;
+    }
 }
