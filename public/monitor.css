@@ -60,6 +60,7 @@ body {
 
 #events_p {
     position: relative;
+    margin: 0;
     top: 50%;
     transform: translateY(-50%);
 }
