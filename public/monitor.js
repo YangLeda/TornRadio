@@ -7,8 +7,10 @@ const YELLOW = "#fffd88";
 
 const notificationsP = document.getElementById("notifications");
 const eventsDiv = document.getElementById("events");
-const eventsP = document.getElementById("events_p");
 const errorsP = document.getElementById("errors");
+const eventsP = document.getElementById("events_p");
+const eventsPCenter = document.getElementById("events_p_center_container");
+const eventsReminderP = document.getElementById("events_reminder_p");
 
 let last_api_timestamp = -1;
 
@@ -53,10 +55,21 @@ async function handleMonitor() {
             textStr += event + "\n";
         }
         eventsP.innerText = textStr;
-        eventsDiv.style.background = RED;
+        eventsPCenter.style.background = RED;
     } else {
         eventsP.innerText = "";
-        eventsDiv.style.background = GREEN;
+        eventsPCenter.style.background = GREEN;
+    }
+    if (json["reminder_events"].length > 0) {
+        let textStr = "";
+        for (let event of json["reminder_events"]) {
+            textStr += event + "\n";
+        }
+        eventsReminderP.innerText = textStr;
+        eventsReminderP.style.background = YELLOW;
+    } else {
+        eventsReminderP.innerText = "";
+        eventsReminderP.style.background = GREEN;
     }
 }
 
