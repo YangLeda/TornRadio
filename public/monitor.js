@@ -13,6 +13,7 @@ const eventsPCenter = document.getElementById("events_p_center_container");
 const eventsReminderP = document.getElementById("events_reminder_p");
 
 let last_api_timestamp = -1;
+let hasRedEvent = false;
 
 handleMonitor();
 setInterval(async () => {
@@ -54,12 +55,15 @@ async function handleMonitor() {
         for (let event of json["events"]) {
             textStr += event + "\n";
         }
-        eventsP.innerText = textStr;
-        if (eventsPCenter.style.background != RED) {
+        if (!hasRedEvent) {
             playSound();
         }
+        hasRedEvent = true;
+        eventsP.innerText = textStr;
         eventsPCenter.style.background = RED;
+
     } else {
+        hasRedEvent = false;
         eventsP.innerText = "";
         eventsPCenter.style.background = GREEN;
     }
