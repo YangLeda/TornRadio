@@ -1,5 +1,5 @@
 const FETCH_MONITOR_INTERVAL = 10000;  // 10s
-const API_REQUEST_DELAY = 1000;  // 1s
+const API_REQUEST_DELAY = 2000;  // 2s
 
 const GREEN = "#b2e672";
 const RED = "#f96b85";
@@ -28,15 +28,9 @@ setInterval(async () => {
 async function handleMonitor() {
     const json = await fetchMonitor();
     if (!json) {
-        errorsP.innerText = "Failed to fetch from tornradio server";
-        errorsP.style.background = RED;
-        last_api_timestamp = -1;
         return;
     }
     if (json["server_error"]) {
-        errorsP.innerText = "Error message from tornradio server: " + json["server_error"];
-        errorsP.style.background = RED;
-        last_api_timestamp = -1;
         return;
     } else {
         last_api_timestamp = json["last_api_timestamp"];
@@ -109,6 +103,8 @@ function unixToString(unix_timestamp) {
 
 function tick() {
     if (last_api_timestamp <= 0) {
+        errorsP.innerText = "Init";
+        errorsP.style.background = RED;
         return;
     }
     let localeString = new Date(last_api_timestamp * 1000).toLocaleString();
@@ -116,7 +112,7 @@ function tick() {
     let durationMinutes = Math.floor(durationInSeconds / 60);
     let durationSeconds = durationInSeconds % 60;
     errorsP.innerText = localeString + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
-    if (durationMinutes < 1) {
+    if (durationMinutes < 2) {
         errorsP.style.background = GREEN;
     } else {
         errorsP.style.background = RED;
