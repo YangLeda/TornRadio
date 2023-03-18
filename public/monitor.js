@@ -55,8 +55,12 @@ async function handleMonitor() {
             textStr += event + "\n";
         }
         eventsP.innerText = textStr;
+        if (eventsPCenter.style.background != RED) {
+            playSound();
+        }
         eventsPCenter.style.background = RED;
     } else {
+        playSound();
         eventsP.innerText = "";
         eventsPCenter.style.background = GREEN;
     }
@@ -114,4 +118,9 @@ function tick() {
     } else {
         errorsP.style.background = RED;
     }
+}
+
+function playSound() {
+    let sound = new Audio("notification-sound.mp3");
+    sound.play();
 }
