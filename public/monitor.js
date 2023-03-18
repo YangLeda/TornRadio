@@ -60,7 +60,6 @@ async function handleMonitor() {
         }
         eventsPCenter.style.background = RED;
     } else {
-        playSound();
         eventsP.innerText = "";
         eventsPCenter.style.background = GREEN;
     }
