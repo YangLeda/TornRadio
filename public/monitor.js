@@ -1,12 +1,11 @@
 const FETCH_MONITOR_INTERVAL = 10000;  // 10s
 const API_REQUEST_DELAY = 2000;  // 2s
 
-//const GREEN = "#b2e672";
-const GREEN = "#000000";
+const BLACK = "#000000";
 const RED = "#f96b85";
 const YELLOW = "#fffd88";
-const BLACK = "#000000";
-const WHITE = "#F8F8FF";
+const FONT_BLACK = "#000000";
+const FONT_WHITE = "#F8F8FF";
 
 const notificationsP = document.getElementById("notifications");
 const eventsDiv = document.getElementById("events");
@@ -14,6 +13,11 @@ const errorsP = document.getElementById("errors");
 const eventsP = document.getElementById("events_p");
 const eventsPCenter = document.getElementById("events_p_center_container");
 const eventsReminderP = document.getElementById("events_reminder_p");
+
+notificationsP.style.background = BLACK;
+eventsPCenter.style.background = BLACK;
+eventsReminderP.style.background = BLACK;
+errorsP.style.background = RED;
 
 let last_api_timestamp = -1;
 let hasRedEvent = false;
@@ -42,10 +46,10 @@ async function handleMonitor() {
     if (json["notifications"]["messages"] > 0 || json["notifications"]["events"] > 0) {
         notificationsP.innerText = json["notifications"]["messages"] > 0 ? "Mails: " + json["notifications"]["messages"] + " " : "" +
             json["notifications"]["events"] > 0 ? "Events: " + json["notifications"]["events"] : "";
-        notificationsP.style.background = RED;
+        notificationsP.style.background = YELLOW;
     } else {
         notificationsP.innerText = "";
-        notificationsP.style.background = GREEN;
+        notificationsP.style.background = BLACK;
     }
     if (json["events"].length > 0) {
         let textStr = "";
@@ -62,7 +66,7 @@ async function handleMonitor() {
     } else {
         hasRedEvent = false;
         eventsP.innerText = "";
-        eventsPCenter.style.background = GREEN;
+        eventsPCenter.style.background = BLACK;
     }
     if (json["reminder_events"].length > 0) {
         let textStr = "";
@@ -73,7 +77,7 @@ async function handleMonitor() {
         eventsReminderP.style.background = YELLOW;
     } else {
         eventsReminderP.innerText = "";
-        eventsReminderP.style.background = GREEN;
+        eventsReminderP.style.background = BLACK;
     }
 }
 
@@ -108,7 +112,7 @@ function tick() {
     if (last_api_timestamp <= 0) {
         errorsP.innerText = "Init";
         errorsP.style.background = RED;
-        errorsP.style.color = BLACK;
+        errorsP.style.color = FONT_BLACK;
         return;
     }
     let localeString = new Date(last_api_timestamp * 1000).toLocaleString();
@@ -117,11 +121,11 @@ function tick() {
     let durationSeconds = durationInSeconds % 60;
     errorsP.innerText = localeString + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
     if (durationMinutes < 2) {
-        errorsP.style.background = GREEN;
-        errorsP.style.color = WHITE;
+        errorsP.style.background = BLACK;
+        errorsP.style.color = FONT_WHITE;
     } else {
         errorsP.style.background = RED;
-        errorsP.style.color = BLACK;
+        errorsP.style.color = FONT_BLACK;
     }
 }
 
