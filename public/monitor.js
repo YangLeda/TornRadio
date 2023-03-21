@@ -1,9 +1,12 @@
 const FETCH_MONITOR_INTERVAL = 10000;  // 10s
 const API_REQUEST_DELAY = 2000;  // 2s
 
-const GREEN = "#b2e672";
+//const GREEN = "#b2e672";
+const GREEN = "#000000";
 const RED = "#f96b85";
 const YELLOW = "#fffd88";
+const BLACK = "#000000";
+const WHITE = "#F8F8FF";
 
 const notificationsP = document.getElementById("notifications");
 const eventsDiv = document.getElementById("events");
@@ -105,6 +108,7 @@ function tick() {
     if (last_api_timestamp <= 0) {
         errorsP.innerText = "Init";
         errorsP.style.background = RED;
+        errorsP.style.color = BLACK;
         return;
     }
     let localeString = new Date(last_api_timestamp * 1000).toLocaleString();
@@ -114,8 +118,10 @@ function tick() {
     errorsP.innerText = localeString + " " + (durationMinutes > 0 ? durationMinutes + " minutes " : "") + durationSeconds + " seconds ago";
     if (durationMinutes < 2) {
         errorsP.style.background = GREEN;
+        errorsP.style.color = WHITE;
     } else {
         errorsP.style.background = RED;
+        errorsP.style.color = BLACK;
     }
 }
 
