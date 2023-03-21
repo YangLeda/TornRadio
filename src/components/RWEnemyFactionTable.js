@@ -51,6 +51,7 @@ const columns = [
     title: "Cans",
     dataIndex: "drink",
     key: "drink",
+    sorter: (a, b) => a.drink - b.drink,
   },
   {
     title: "Est. Stats",
@@ -90,7 +91,7 @@ const columns = [
     onFilter: (value, record) => record.estimateBS.indexOf(value) == 0,
   },
   {
-    title: "冰蛙",
+    title: "BW",
     dataIndex: "BWestimateBS",
     key: "BWestimateBS",
     sorter: (a, b) => bw_compareEstimateBS(a, b),
