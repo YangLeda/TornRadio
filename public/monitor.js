@@ -19,6 +19,14 @@ eventsPCenter.style.background = BLACK;
 eventsReminderP.style.background = BLACK;
 errorsP.style.background = RED;
 
+eventsDiv.onclick = function () {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        document.documentElement.requestFullscreen();
+    }
+};
+
 let last_api_timestamp = -1;
 let hasRedEvent = false;
 
