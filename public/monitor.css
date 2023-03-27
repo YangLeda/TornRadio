@@ -36,6 +36,8 @@ body {
     top: 45px;
     bottom: 25px;
     width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
     vertical-align: middle;
     margin: 0;
